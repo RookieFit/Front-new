@@ -14,25 +14,21 @@ const SideBar = () => {
     };
 
     return (
-        <div className="w-64 h-full bg-gray-800 text-white p-4">
+        <nav>
             <h2 className="text-xl font-semibold mb-4">메뉴</h2>
             <ul className="space-y-2">
                 {menuItems.map((item, index) => (
                     <li key={index}>
-                        <div>
-                            <Link
-                                to={item.path}
-                                className="block p-2 hover:bg-gray-700 rounded cursor-pointer"
-                                onClick={() => toggleMenu(index)}
-                            >
-                                {item.name}
-                            </Link>
-                        </div>
+                        <button
+                            onClick={() => toggleMenu(index)}
+                            className="block w-full text-left p-2 hover:bg-gray-700 rounded"
+                        >
+                            {item.name}
+                        </button>
 
                         {item.subItems && item.subItems.length > 0 && (
                             <ul
-                                className={`pl-4 mt-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${openMenu === index ? 'max-h-96' : 'max-h-0'
-                                    }`}
+                                className={`pl-4 mt-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${openMenu === index ? 'max-h-96' : 'max-h-0'}`}
                             >
                                 {item.subItems.map((subItem, subIndex) => (
                                     <li key={subIndex}>
@@ -49,7 +45,7 @@ const SideBar = () => {
                     </li>
                 ))}
             </ul>
-        </div>
+        </nav>
     );
 };
 

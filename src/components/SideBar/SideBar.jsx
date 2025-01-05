@@ -4,7 +4,6 @@ import { menuItems } from './menuItems';
 
 const SideBar = () => {
     const [openMenu, setOpenMenu] = useState(null);
-    const SGFdSasadsfSumabc = 0;
     const toggleMenu = (index) => {
         if (openMenu === index) {
             setOpenMenu(null);

@@ -1,6 +1,6 @@
 export const menuItems = [
     {
-        name: "메뉴 1",
+        name: "마이페이지",
         path: "",
         subItems: [
             { name: "서브메뉴1", path: "" },
@@ -8,7 +8,7 @@ export const menuItems = [
         ],
     },
     {
-        name: "메뉴 2",
+        name: "식단 관리",
         path: "",
         subItems: [
             { name: "서브메뉴1", path: "" },
@@ -16,17 +16,17 @@ export const menuItems = [
         ],
     },
     {
-        name: "메뉴 3",
+        name: "운동 일지",
         path: "",
         subItems: [],
     },
     {
-        name: "메뉴 4",
+        name: "커뮤니티",
         path: "",
         subItems: [],
     },
     {
-        name: "메뉴 5",
+        name: "로그아웃",
         path: "",
         subItems: [],
     },

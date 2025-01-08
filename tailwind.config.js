@@ -7,7 +7,12 @@ export default {
     "./src/**/*.{js,jsx,ts,tsx}", // Vite에서 사용할 파일 경로
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        rookieRed: '#8A1C1C',
+        rookieHover: '#A82828',
+      }
+    },
   },
   plugins: [
     daisyui,

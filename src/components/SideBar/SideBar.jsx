@@ -14,13 +14,12 @@ const SideBar = () => {
 
     return (
         <nav>
-            <h2 className="text-xl font-semibold mb-4">Rookie Fit</h2>
             <ul className="space-y-2">
                 {menuItems.map((item, index) => (
                     <li key={index}>
                         <button
                             onClick={() => toggleMenu(index)}
-                            className="block w-full text-left p-2 hover:bg-gray-700 rounded"
+                            className="block w-full text-left p-2 hover:bg-rookieHover rounded"
                         >
                             {item.name}
                         </button>
@@ -33,7 +32,7 @@ const SideBar = () => {
                                     <li key={subIndex}>
                                         <Link
                                             to={subItem.path}
-                                            className="block p-2 hover:bg-gray-600 rounded"
+                                            className="block p-2 hover:bg-rookieHover rounded"
                                         >
                                             {subItem.name}
                                         </Link>

@@ -14,7 +14,7 @@ const SideBar = () => {
 
     return (
         <nav>
-            <h2 className="text-xl font-semibold mb-4">메뉴</h2>
+            <h2 className="text-xl font-semibold mb-4">Rookie Fit</h2>
             <ul className="space-y-2">
                 {menuItems.map((item, index) => (
                     <li key={index}>

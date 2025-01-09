@@ -28,7 +28,6 @@ const Layout = () => {
                     isCollapsed={isCollapsed}
                     toggleSidebar={toggleSidebar}
                 />
-
                 <main className="flex-1 p-6 bg-gray-100">
                     <Outlet />
                 </main>

@@ -16,7 +16,7 @@ const SideBar = ({ isCollapsed, toggleSidebar }) => {
 
     return (
         <aside
-            className={`bg-rookieFitRed h-full transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}
+            className={`bg-rookieFitRed h-full transition-[width] duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}
         >
             <nav>
                 <ul className="space-y-2">
@@ -38,9 +38,10 @@ const SideBar = ({ isCollapsed, toggleSidebar }) => {
                             {item.subItems && item.subItems.length > 0 && (
                                 <ul
                                     id={`menu-${index}`}
-                                    className={`pl-4 mt-2 space-y-1 overflow-hidden ${openMenu === index && !isCollapsed
-                                        ? 'max-h-96 transition-[max-height] duration-300 ease-in-out'
-                                        : 'max-h-0 transition-[max-height] duration-300 ease-in-out'
+                                    className={`pl-4 mt-2 space-y-1 overflow-hidden 
+                                        ${openMenu === index && !isCollapsed
+                                            ? 'max-h-[500px] opacity-100 transition-[max-height, opacity] duration-300 ease-in-out'
+                                            : 'max-h-0 opacity-0 transition-[max-height, opacity] duration-300 ease-in-out'
                                         }`}
                                 >
                                     {item.subItems.map((subItem, subIndex) => (

@@ -1,7 +1,9 @@
+import Login from "../../components/Login/Login";
+
 const LoginPage = () => {
     return (
         <div>
-            로그인 페이지 입니다.
+            <Login />
         </div>
     );
 };

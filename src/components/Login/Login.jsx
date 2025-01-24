@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Login = () => {
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        // TODO: 로그인 로직 추가
+        console.log('Login submitted with ID:', id, 'and Password:', password);
+    };
+
     return (
         <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             <section className="w-full max-w-sm bg-white rounded-lg shadow-md p-6">
                 <header>
                     <h1 className="text-5xl font-bold text-center mb-6 text-rookieRed">LOGIN</h1>
                 </header>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleSubmit}>
                     {/* ID 입력 */}
                     <div className="relative">
                         <label htmlFor="id" className="sr-only">
@@ -18,6 +27,8 @@ const Login = () => {
                             id="id"
                             placeholder="ID"
                             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rookieHover"
+                            value={id}
+                            onChange={(e) => setId(e.target.value)}
                         />
                     </div>
                     <div className="relative">
@@ -29,6 +40,8 @@ const Login = () => {
                             id="password"
                             placeholder="PW"
                             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rookieHover"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
                     {/* 로그인 버튼 */}

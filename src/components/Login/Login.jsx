@@ -6,7 +6,6 @@ const Login = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log("Login submitted with ID:", id);
     };
 
     return (

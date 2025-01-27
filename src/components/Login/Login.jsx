@@ -1,24 +1,23 @@
 import React, { useState } from "react";
 
 const Login = () => {
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
+    const [id, setId] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // TODO: 로그인 로직 추가
-        console.log('Login submitted with ID:', id, 'and Password:', password);
     };
 
     return (
-        <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <section className="w-full max-w-sm bg-white rounded-lg shadow-md p-6">
+        <div className="flex flex-col items-center justify-center h-full w-full">
+            <section className="w-full h-full max-w-md rounded-lg p-8 flex flex-col left-1/2 justify-center">
                 <header>
-                    <h1 className="text-5xl font-bold text-center mb-6 text-rookieRed">LOGIN</h1>
+                    <h1 className="text-7xl font-bold text-center mb-24 text-rookieRed">
+                        LOGIN
+                    </h1>
                 </header>
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                    {/* ID 입력 */}
-                    <div className="relative">
+                <form onSubmit={handleSubmit}>
+                    <div>
                         <label htmlFor="id" className="sr-only">
                             ID
                         </label>
@@ -26,12 +25,12 @@ const Login = () => {
                             type="text"
                             id="id"
                             placeholder="ID"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rookieHover"
+                            className="w-full px-4 py-3 mb-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rookieHover"
                             value={id}
                             onChange={(e) => setId(e.target.value)}
                         />
                     </div>
-                    <div className="relative">
+                    <div>
                         <label htmlFor="password" className="sr-only">
                             PW
                         </label>
@@ -39,21 +38,19 @@ const Login = () => {
                             type="password"
                             id="password"
                             placeholder="PW"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rookieHover"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rookieHover"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    {/* 로그인 버튼 */}
                     <button
                         type="submit"
-                        className="w-full bg-rookieRed text-white py-2 rounded-md hover:bg-rookieHover"
+                        className="w-full bg-rookieRed text-white py-4 mt-10 rounded-md hover:bg-rookieHover"
                     >
                         로그인
                     </button>
                 </form>
-                {/* 아이디 찾기 | 비밀번호 찾기 */}
-                <footer className="text-right mt-4 text-sm font-extralight text-rookieRed">
+                <footer className="text-right mt-4 text-sm font-light text-rookieRed">
                     <a href="#" className="hover:underline">
                         아이디찾기
                     </a>
@@ -63,7 +60,7 @@ const Login = () => {
                     </a>
                 </footer>
             </section>
-        </main>
+        </div>
     );
 };
 

@@ -1,28 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
+import axios from 'axios';
 
 const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageList }) => {
+    const testUrl = 'http://localhost:4040';
+    const [isEdit, setIsEdit] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [workoutDetailList, setWorkoutDetailList] = useState([
-        {
-            workoutName: '스쿼트',
-            reps: '30회',
-            sets: '5세트',
-            restTime: '3분',
-        },
-        {
-            workoutName: '스파링',
-            reps: '30회',
-            sets: '5세트',
-            restTime: '3분',
-        },
-        {
-            workoutName: '러닝머신',
-            reps: '30회',
-            sets: '5세트',
-            restTime: '3분',
-        },
-    ]);
+    const [workoutDetailList, setWorkoutDetailList] = useState([]);
+
+    useEffect(() => {
+        const fetchWorkoutDetailList = async () => {
+            try {
+                const response = await axios.get(
+                    `${testUrl}/api/v1/user/userworkoutdetaildata?workoutDetailCreatedDate=${selectedDate}`,
+                    {
+                        headers: {
+                            Authorization:
+                                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwaXBha21qIiwiaWF0IjoxNzM4NTg0MDY2LCJleHAiOjE3Mzg1ODc2NjZ9.-75jlPoK1csEy7aEypwG-P65yWquVRZvTBUzgTTvgJg",
+                        },
+                    }
+                );
+
+                // case 1: 백엔드가 배열을 직접 반환하는 경우
+                if (Array.isArray(response.data)) {
+                    setWorkoutDetailList(response.data);
+                }
+                // case 3: 예외 처리
+                else {
+                    console.warn("예상치 못한 응답 형식:", response.data);
+                    setWorkoutDetailList([]);
+                }
+            } catch (error) {
+                console.error("운동 데이터를 불러오는 중 오류 발생:", error);
+                setWorkoutDetailList([]); // 오류 발생 시 빈 배열 유지
+            }
+        };
+
+        fetchWorkoutDetailList();
+    }, [selectedDate]);
 
     const [dietList, setDietList] = useState([
         {
@@ -101,17 +116,20 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
 
                 {/* 오른쪽 (운동일지 & 식단) */}
                 <div className="flex flex-col justify-center h-full w-1/2">
-                    <div className="mb-3 border-2 border-solid border-gray-300 p-5">
+                    {workoutDetailList.length > 0 ? <div className="mb-3 border-2 border-solid border-gray-300 p-5">
                         <p className="text-lg h-1/2 font-semibold text-center overflow-y-auto mb-5">운동일지</p>
                         {workoutDetailList.map((workout, index) => (
                             <div key={index} className="flex flex-row justify-center items-center gap-10 mb-2">
                                 <p className="font-semibold w-1/5">{workout.workoutName}</p>
-                                <p>{`${workout.sets}`}</p>
-                                <p>{`${workout.reps}`}</p>
+                                <p>{`${workout.sets}`}세트</p>
+                                <p>{`${workout.reps}`}회</p>
                                 <p>{`${workout.restTime}`}</p>
                             </div>
                         ))}
-                    </div>
+                    </div> : <div className="flex flex-col justify-center mb-3 border-2 border-solid border-gray-300 p-5">
+                        <p className="text-lg h-1/2 font-semibold text-center overflow-y-auto mb-5">새로운 기록을 남겨 보세요.</p>
+                        <button className='bg-gray-300 w-1/2'>작성하기</button>
+                    </div>}
                     {title && comment && workoutDetailList ? (
                         <div className="mb-3 border-2 border-solid border-gray-300 p-5">
                             <p className="text-lg h-1/2 font-semibold text-center overflow-y-auto mb-5">식단</p>
@@ -156,8 +174,8 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
 
             {/* 푸터 */}
             <footer className="mt-5 flex justify-center gap-10 w-full">
-                <button className="bg-white rounded-lg text-black text-white border-2 w-1/6 px-4 py-2 rounded hover:opacity-50" onClick={() => setIsOpen(false)}>닫기</button>
-                {title && comment && workoutDetailList ?
+                <button className="bg-white rounded-lg text-black text-gray-700 border-2 w-1/6 px-4 py-2 rounded hover:opacity-50" onClick={() => setIsOpen(false)}>닫기</button>
+                {title || comment || workoutDetailList.length ?
                     <button className="bg-gray-500 rounded-lg text-white px-4 py-2 w-1/6 rounded hover:opacity-50">수정하기</button> :
                     <button className="bg-gray-500 rounded-lg text-white px-4 py-2 w-1/6 rounded hover:opacity-50">저장하기</button>
                 }

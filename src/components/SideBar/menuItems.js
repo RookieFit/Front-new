@@ -18,7 +18,9 @@ export const menuItems = [
     {
         name: "운동 일지",
         path: "",
-        subItems: [],
+        subItems: [
+            { name: "운동일지", path: "/workout" },
+        ],
     },
     {
         name: "커뮤니티",

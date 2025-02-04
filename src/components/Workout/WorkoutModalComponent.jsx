@@ -1,31 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
-import axios from 'axios';
+import ApiClient from '../Common/ApiClient';
 
 const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageList }) => {
-    const testUrl = 'http://localhost:4040';
-    const [isEdit, setIsEdit] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [workoutDetailList, setWorkoutDetailList] = useState([]);
 
     useEffect(() => {
         const fetchWorkoutDetailList = async () => {
             try {
-                const response = await axios.get(
-                    `${testUrl}/api/v1/user/userworkoutdetaildata?workoutDetailCreatedDate=${selectedDate}`,
-                    {
-                        headers: {
-                            Authorization:
-                                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwaXBha21qIiwiaWF0IjoxNzM4NTg0MDY2LCJleHAiOjE3Mzg1ODc2NjZ9.-75jlPoK1csEy7aEypwG-P65yWquVRZvTBUzgTTvgJg",
-                        },
-                    }
+                const response = await ApiClient.get(
+                    `/user/userworkoutdetaildata?workoutDetailCreatedDate=${selectedDate}`,
                 );
-
-                // case 1: 백엔드가 배열을 직접 반환하는 경우
                 if (Array.isArray(response.data)) {
                     setWorkoutDetailList(response.data);
                 }
-                // case 3: 예외 처리
                 else {
                     console.warn("예상치 못한 응답 형식:", response.data);
                     setWorkoutDetailList([]);

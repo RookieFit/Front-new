@@ -4,10 +4,9 @@ import interactionPlugin from "@fullcalendar/interaction";
 import React, { useState, useEffect } from 'react';
 import PropTypes from "prop-types";
 import './WorkoutCalendar.css';
-import axios from 'axios';
+import ApiClient from '../Common/ApiClient';
 
 const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, setImageList }) => {
-    const testUrl = 'http://localhost:4040';
 
     const [events, setEvents] = useState([]);
     const [workoutList, setWorkoutList] = useState([]);
@@ -27,13 +26,8 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
     useEffect(() => {
         const fetchWorkoutList = async () => {
             try {
-                const response = await axios.get(
-                    `${testUrl}/api/v1/user/userworkoutlistdata`,
-                    {
-                        headers: {
-                            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwaXBha21qIiwiaWF0IjoxNzM4NTg0MDY2LCJleHAiOjE3Mzg1ODc2NjZ9.-75jlPoK1csEy7aEypwG-P65yWquVRZvTBUzgTTvgJg'
-                        }
-                    }
+                const response = await ApiClient.get(
+                    `/user/userworkoutlistdata`,
                 );
                 console.log("백엔드 응답 데이터:", response.data);
                 setWorkoutList(response.data); // workoutList 업데이트

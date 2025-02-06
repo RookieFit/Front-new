@@ -1,11 +1,39 @@
 import React, { useState } from "react";
+import ApiClient from "../Common/ApiClient";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = (event) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        const requestBody = {
+            userId: id,
+            user_password: password
+        };
+        try {
+            const response = await ApiClient.post(
+                '/auth/sign-in',
+                requestBody
+            );
+            const { token, expirationTime } = response.data;
+            localStorage.setItem("token", token);
+            localStorage.setItem("expirationTime", expirationTime);
+
+            navigate('/');
+        } catch (error) {
+            if (error.response) {
+                console.log("서버 응답 오류:", error.response.data);
+                console.error("응답 상태 코드:", error.response.status);
+            } else if (error.request) {
+                console.error("서버로부터 응답을 받지 못했습니다:", error.request);
+            } else {
+                console.error("요청 설정 오류:", error.message);
+            }
+        };
     };
 
     return (

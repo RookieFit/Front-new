@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
-import ApiClient from '../Common/ApiClient';
+import ApiClient from '../../services/ApiClient';
 
 const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageList }) => {
     const [currentIndex, setCurrentIndex] = useState(0);

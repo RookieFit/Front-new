@@ -4,7 +4,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import React, { useState, useEffect } from 'react';
 import PropTypes from "prop-types";
 import './WorkoutCalendar.css';
-import ApiClient from '../Common/ApiClient';
+import ApiClient from '../../services/ApiClient';
 
 const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, setImageList }) => {
 

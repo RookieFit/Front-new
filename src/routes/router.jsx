@@ -4,6 +4,7 @@ import LoginPage from "../pages/Login/LoginPage";
 import Workout from "../components/Workout/Workout";
 import MyPage from "../pages/MyPage/MyPage";
 import MainPage from "../pages/Main/MainPage";
+import Diet from "../components/Diet/Diet";
 
 
 const router = createBrowserRouter([
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
                 path: "/workout",
                 element: <Workout />,
             },
+            {
+				path: "/diet",
+				element: <Diet />,
+			},
         ],
     },
     {

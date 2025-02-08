@@ -3,8 +3,7 @@ export const menuItems = [
         name: "마이페이지",
         path: "",
         subItems: [
-            { name: "서브메뉴1", path: "" },
-            { name: "서브메뉴2", path: "" },
+            { name: "마이페이지", path: "/mypage" },
         ],
     },
     {

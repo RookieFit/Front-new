@@ -10,7 +10,7 @@ export const menuItems = [
         name: "식단 관리",
         path: "",
         subItems: [
-            { name: "서브메뉴1", path: "" },
+            { name: "식단", path: "/diet" },
             { name: "서브메뉴2", path: "" },
         ],
     },

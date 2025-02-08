@@ -21,7 +21,7 @@ function WorkoutDisableDietSection({ dietList }) {
             <div className="absolute inset-0 flex flex-col justify-center items-center z-10">
                 <p className="text-center text-black opacity-100">식단 수정은 식단페이지에서 가능합니다</p>
                 <div
-                    className="cursor-pointer text-blue-500 mt-4 text-center opacity-100 z-20"
+                    className="cursor-pointer text-blue-500 mt-4 text-center z-20"
                     style={{ pointerEvents: 'auto' }}
                     onClick={() => alert("이동")}  // 식단 페이지로 이동
                 >

@@ -55,7 +55,6 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
         },
     ]);
 
-
     // 오른쪽 버튼 클릭 시 처리
     const moveRight = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % imageList.length);
@@ -141,10 +140,10 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
 
             {/* 푸터 */}
             <footer className="mt-5 flex justify-center gap-10 w-full">
-                <button className="bg-white rounded-lg text-gray-700 border-2 w-1/6 px-4 py-2 rounded hover:opacity-50" onClick={() => setIsOpen(false)}>닫기</button>
+                <button className="bg-white rounded-lg text-gray-700 border-2 w-1/6 px-4 py-2 hover:opacity-50" onClick={() => setIsOpen(false)}>닫기</button>
                 {title || comment || workoutDetailList.length ?
-                    <button className="bg-gray-500 rounded-lg text-white px-4 py-2 w-1/6 rounded hover:opacity-50">수정하기</button> :
-                    <button className="bg-gray-500 rounded-lg text-white px-4 py-2 w-1/6 rounded hover:opacity-50">저장하기</button>
+                    <button className="bg-gray-500 rounded-lg text-white px-4 py-2 w-1/6 hover:opacity-50">수정하기</button> :
+                    <button className="bg-gray-500 rounded-lg text-white px-4 py-2 w-1/6 hover:opacity-50">저장하기</button>
                 }
             </footer>
         </div>

@@ -16,7 +16,7 @@ const SideBar = ({ isCollapsed, toggleSidebar }) => {
 
     return (
         <aside
-            className={`bg-rookieFitRed h-full transition-[width] duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}
+            className={`bg-rookieRed h-full transition-[width] duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}
         >
             <nav>
                 <ul className="space-y-2">

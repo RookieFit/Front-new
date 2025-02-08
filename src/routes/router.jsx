@@ -6,28 +6,28 @@ import MainPage from "../pages/Main/MainPage";
 import Diet from "../components/Diet/Diet";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        path: "/",
-        element: <MainPage />,
-      },
-      {
-        path: "/workout",
-        element: <Workout />,
-      },
-      {
-        path: "/diet",
-        element: <Diet />,
-      },
-    ],
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
+	{
+		path: "/",
+		element: <Layout />,
+		children: [
+			{
+				path: "/",
+				element: <MainPage />,
+			},
+			{
+				path: "/workout",
+				element: <Workout />,
+			},
+			{
+				path: "/diet",
+				element: <Diet />,
+			},
+		],
+	},
+	{
+		path: "/login",
+		element: <LoginPage />,
+	},
 ]);
 
 export default router;

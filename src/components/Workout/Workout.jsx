@@ -11,7 +11,7 @@ const Workout = () => {
     const [imageList, setImageList] = useState([]);
 
     return (
-        <div>
+        <div className='h-full w-full'>
             <WorkoutCalendar
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}

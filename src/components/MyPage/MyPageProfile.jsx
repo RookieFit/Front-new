@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IoIosPin } from "react-icons/io";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
-import ApiClient from '../Common/ApiClient';
+import ApiClient from '../../services/ApiClient';
 import PropTypes from "prop-types";
 
 const MyPageProfile = ({ setCurrentName }) => {

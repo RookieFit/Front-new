@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ApiClient from '../Common/ApiClient';
+import ApiClient from '../../services/ApiClient';
 import PropTypes from "prop-types";
 
 const MyPageUserInfoComponent = ({ currentName }) => {

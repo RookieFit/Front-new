@@ -105,27 +105,28 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
     };
 
     return (
-        <div className="h-[800px] p-4 bg-gray-50 rounded-lg shadow-md">
-            <FullCalendar
-                height="100%"
-                plugins={[dayGridPlugin, interactionPlugin]}
-                initialView="dayGridMonth"
-                events={events}
-                editable={true}
-                selectable={true}
-                locale={'ko'}
-                headerToolbar={{
-                    left: "prev",
-                    center: "title",
-                    right: "next",
-                }}
-                // 이벤트 클릭 시
-                eventClick={(info) => handleSelectDate(info.event.startStr)}
-                // 날짜 클릭 시, 운동 일정이 있으면 운동 제목, 없으면 공휴일 제목 반환
-                dateClick={(info) => handleSelectDate(info.dateStr)}
-            />
+        <div className="flex flex-col items-center w-full h-full">
+            <div className="h-full p-4 bg-gray-50 rounded-lg shadow-md w-full">
+                <FullCalendar
+                    height="100%"
+                    plugins={[dayGridPlugin, interactionPlugin]}
+                    initialView="dayGridMonth"
+                    events={events}
+                    editable={true}
+                    selectable={true}
+                    locale={'ko'}
+                    headerToolbar={{
+                        left: "prev",
+                        center: "title",
+                        right: "next",
+                    }}
+                    eventClick={(info) => handleSelectDate(info.event.startStr)}
+                    dateClick={(info) => handleSelectDate(info.dateStr)}
+                />
+            </div>
         </div>
     );
+
 };
 
 WorkoutCalendar.propTypes = {

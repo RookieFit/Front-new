@@ -3,6 +3,8 @@ import Layout from "../pages/Layout";
 import LoginPage from "../pages/Login/LoginPage";
 import Workout from "../components/Workout/Workout";
 import MyPage from "../pages/MyPage/MyPage";
+import MainPage from "../pages/Main/MainPage";
+
 
 const router = createBrowserRouter([
     {
@@ -10,8 +12,8 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
             {
-                path: "",
-                element: <div>내용이 들어가야 합니다요</div>,
+                path: "/",
+                element: <MainPage />
             },
             {
                 path: "/mypage",

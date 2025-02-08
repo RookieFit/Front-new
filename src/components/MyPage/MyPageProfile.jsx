@@ -52,7 +52,7 @@ const MyPageProfile = ({ setCurrentName }) => {
                     <IoIosPin />
                     <span>{userProfile.userAddress}</span>
                 </div>
-                <div className='flex flex-raw items-center gap-2'>
+                <div className='flex flex-row items-center gap-2'>
                     <HiOutlineBuildingOffice2 />
                     <span>{userProfile.gymName}</span>
                 </div>

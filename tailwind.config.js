@@ -11,6 +11,8 @@ export default {
       colors: {
         rookieRed: '#8A1C1C',
         rookieHover: '#A82828',
+        mainRed: '#CEA1A1',
+        mainText: '#767676'
       }
     },
   },

@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const testUrl = 'http://localhost:4040';
+const requestUrl = 'http://pipakmjhomeserver.ddns.net';
 
 const ApiClient = axios.create({
-    baseURL: `${testUrl}/api/v1`,
+    baseURL: `${requestUrl}/api/v1`,
     headers: {
         "Content-Type": "application/json"
     }

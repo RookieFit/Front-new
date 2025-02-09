@@ -1,5 +1,17 @@
 @charset "utf-8";
 
+.fc-col-header {
+    width: 100% !important;
+}
+
+.fc-daygrid-body.fc-daygrid-body-unbalanced {
+    width: 100% !important;
+}
+
+.fc-scrollgrid-sync-table {
+    width: 100% !important;
+}
+
 /* 일요일 날짜: 빨간색 */
 .fc .fc-day-sun a {
     color: red;
@@ -43,6 +55,10 @@
 }
 
 /* 날짜변경 화살표 아이콘 */
+.fc .fc-button-primary {
+    font-size: large !important;
+}
+
 .fc .fc-button-primary span {
     height: 30px;
     width: 30px;
@@ -80,6 +96,11 @@
     flex-direction: row;
     height: 30px;
     margin-bottom: 3px;
+}
+
+/*날짜 칸 높이*/
+.fc .fc-daygrid-day-frame {
+    min-height: 120px;
 }
 
 /* 날짜 숫자 z-index 초기화 */

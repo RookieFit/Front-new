@@ -19,7 +19,7 @@ function WorkoutDisableDietSection({ dietList }) {
 
             {/* 문구를 비활성화된 영역의 중앙에 띄우기 */}
             <div className="absolute inset-0 flex flex-col justify-center items-center z-10">
-                <p className="text-center text-black opacity-100">식단 수정은 식단페이지에서 가능합니다</p>
+                <p className="text-center text-black">식단 수정은 식단페이지에서 가능합니다</p>
                 <div
                     className="cursor-pointer text-blue-500 mt-4 text-center z-20"
                     style={{ pointerEvents: 'auto' }}

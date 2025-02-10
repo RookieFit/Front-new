@@ -6,13 +6,13 @@ import MyPageWorkoutGraph from '../../components/MyPage/MyPageWorkoutGraph';
 const MyPage = () => {
     const [currentName, setCurrentName] = useState('');
     return (
-        <div className='flex flex-row justify-center gap-5 h-[900px] w-full my-8'>
+        <div className='flex flex-row justify-center gap-5 h-[800px] w-full my-8'>
 
             <section className='flex flex-col gap-5 w-2/5 '>
-                <section className='border-2 h-1/5 bg-white shadow-md'>
+                <section className='border-2 h-1/4 bg-white shadow-md'>
                     <MyPageProfile setCurrentName={setCurrentName} />
                 </section>
-                <section className='h-2/3 p-5 border-2 bg-white shadow-md'>
+                <section className='h-3/4 p-5 border-2 bg-white shadow-md'>
                     <div className='h-full overflow-auto'>
                         <MyPageWorkoutGraph />
                     </div>

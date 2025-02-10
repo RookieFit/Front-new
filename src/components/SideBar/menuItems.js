@@ -24,7 +24,9 @@ export const menuItems = [
     {
         name: "커뮤니티",
         path: "",
-        subItems: [],
+        subItems: [
+            { name: "커뮤니티", path: "/community" },
+        ],
     },
     {
         name: "로그아웃",

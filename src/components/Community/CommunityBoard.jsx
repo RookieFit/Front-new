@@ -1,8 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Pagination from '../Common/Pagination';
 import writeImage from '../assets/images/community-write-image.png';
+import { useNavigate } from 'react-router-dom';
 
 const CommunityBoard = () => {
+
+    const navigator = useNavigate();
+
     const boardTypeList = [
         '전체', '바프', '일상', '등등', '기타'
     ];
@@ -27,6 +31,11 @@ const CommunityBoard = () => {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
+
+    const handlePosts = () => {
+        alert('글쓰러가기');
+        navigator('/editor');
+    };
 
     return (
         <div className='flex flex-col items-center w-full my-2'>
@@ -66,7 +75,7 @@ const CommunityBoard = () => {
                 </div>
                 <button
                     className='flex flex-row border-2 p-1 w-[100px]'
-                    onClick={() => alert('글쓰러가기')}
+                    onClick={() => handlePosts()}
                 >
                     <img src={writeImage} alt='writeImage' className='w-6 h-6 mr-2' />
                     글쓰기

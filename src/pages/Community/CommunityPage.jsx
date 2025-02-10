@@ -4,13 +4,13 @@ import CommunityList from '../../components/Community/CommunityList';
 
 const CommunityPage = () => {
     return (
-        <div className='h-screen mt-10'>
+        <div>
             <header className='mt-10'>
                 <CommunityHeader />
             </header>
-            <body className='h-full'>
+            <section className='h-full'>
                 <CommunityList />
-            </body>
+            </section>
         </div>
     );
 };

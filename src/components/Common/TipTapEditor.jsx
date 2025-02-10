@@ -1,9 +1,10 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 
-export default function TipTapEditor(content, onChange, onImageUpload) {
+export default function TipTapEditor({ content, onChange, onImageUpload }) {
     const editor = useEditor({
         extensions: [StarterKit, Image],
         content,
@@ -45,5 +46,11 @@ export default function TipTapEditor(content, onChange, onImageUpload) {
             <EditorContent editor={editor} className="border p-2" />
         </div>
     );
+};
+
+TipTapEditor.propTypes = {
+    content: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onImageUpload: PropTypes.func.isRequired,
 };
 

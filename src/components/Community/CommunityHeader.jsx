@@ -1,6 +1,6 @@
 import React from 'react';
 
-function CommunityHeader() {
+const CommunityHeader = () => {
     return (
         <header className='w-full text-center my-5'>
             <h1 className='text-4xl font-bold mb-4'>커뮤니티</h1>

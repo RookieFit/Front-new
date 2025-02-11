@@ -6,6 +6,7 @@ import MyPage from "../pages/MyPage/MyPage";
 import MainPage from "../pages/Main/MainPage";
 import Diet from "../components/Diet/Diet";
 import CommunityPage from "../pages/Community/CommunityPage";
+import CommunityEditor from "../components/Community/CommunityEditor";
 
 
 const router = createBrowserRouter([
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
             {
                 path: "/community",
                 element: <CommunityPage />,
+            },
+            {
+                path: "/editor",
+                element: <CommunityEditor />,
             },
             {
                 path: "/diet",

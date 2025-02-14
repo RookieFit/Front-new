@@ -49,11 +49,11 @@ const SignUp = ({ onPhoneAuth }) => {
                                 <button
                                     type="button"
                                     onClick={() => setActiveField("password")}
-                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gray-200 text-black text-xs px-2 py-1 rounded"
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gray-200 text-black text-xs px-3 py-2 rounded"
                                 >
                                     NEXT
                                 </button>
-                                <p className="absolute -bottom-4 right-0 text-[10px] text-white">
+                                <p className="absolute -bottom-7 right-0 text-l text-white">
                                     사용가능한 아이디 입니다.
                                 </p>
                             </>
@@ -76,7 +76,7 @@ const SignUp = ({ onPhoneAuth }) => {
                             <button
                                 type="button"
                                 onClick={() => setActiveField("confirmPassword")}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gray-200 text-black text-xs px-2 py-1 rounded"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gray-200 text-black text-xs px-3 py-2 rounded"
                             >
                                 NEXT
                             </button>
@@ -107,7 +107,7 @@ const SignUp = ({ onPhoneAuth }) => {
                                             setActiveField("phoneAuth");
                                         }
                                     }}
-                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gray-200 text-black text-xs px-2 py-1 rounded"
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gray-200 text-black text-xs px-3 py-2 rounded"
                                 >
                                     NEXT
                                 </button>

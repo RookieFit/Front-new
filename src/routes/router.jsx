@@ -7,6 +7,7 @@ import MainPage from "../pages/Main/MainPage";
 import Diet from "../components/Diet/Diet";
 import CommunityPage from "../pages/Community/CommunityPage";
 import CommunityEditor from "../components/Community/CommunityEditor";
+import SignUpPage from "../pages/SignUp/SignUpPage";
 
 
 const router = createBrowserRouter([
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
     {
         path: "/login",
         element: <LoginPage />,
+    },
+    {
+        path: "/signup",
+        element: <SignUpPage />,
     },
 ]);
 

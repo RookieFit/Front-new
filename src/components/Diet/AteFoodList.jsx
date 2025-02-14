@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import Modal from '../Common/Modal';
+import DietModalComponent from './DietModalComponent';
 
 const AteFoodList = () => {
 	// 식단 데이터
@@ -10,13 +12,14 @@ const AteFoodList = () => {
 		{ name: '바나나', carbs: 27, protein: 1, fat: 0.3, calories: 105 },
 		{ name: '오트밀', carbs: 66, protein: 11, fat: 6, calories: 389 },
 		{ name: '연어', carbs: 0, protein: 20, fat: 13, calories: 208 }
-	]
+	];
 
-	const [openIndex, setOpenIndex] = useState(null)
+	const [openIndex, setOpenIndex] = useState(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const toggleDropdown = (index) => {
-		setOpenIndex(openIndex === index ? null : index)
-	}
+		setOpenIndex(openIndex === index ? null : index);
+	};
 
 	return (
 		<div className="ml-12 mt-28 w-[75vh]">
@@ -50,12 +53,19 @@ const AteFoodList = () => {
 
 			{/* 식단 버튼 */}
 			<div className="absolute bottom-28 left-0 w-full flex justify-center">
-				<button className="w-[60%] bg-rookieRed text-white font-semibold py-3 rounded-lg">
+				<button className="w-[60%] bg-rookieRed text-white font-semibold py-3 rounded-lg" onClick={() => setIsModalOpen(true)}>
 					식단 검색 및 추가하기
 				</button>
 			</div>
-		</div>
-	)
-}
 
-export default AteFoodList
+			{/* 모달 */}
+			<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+				<div>
+					<DietModalComponent setIsModalOpen={setIsModalOpen} />
+				</div>
+			</Modal>
+		</div>
+	);
+};
+
+export default AteFoodList;

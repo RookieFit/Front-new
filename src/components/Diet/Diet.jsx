@@ -12,7 +12,7 @@ const Diet = () => {
                     <FoodCharts />
                 </div>
 
-                {/* 세로로 얇은 선 */}
+                {/* 세로선 */}
                 <div className="flex items-center justify-center w-0.5">
                     <div className="h-[70%] w-0.5 bg-gray-200"></div>
                 </div>

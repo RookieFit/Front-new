@@ -1,23 +1,29 @@
-import React from "react";
-import FoodCharts from "./FoodCharts";
+import React, { useState } from "react";
+import FoodChart from "./FoodChart";
 import AteFoodList from "./AteFoodList";
 
 const Diet = () => {
+    const [ateFoodList, setAteFoodList] = useState([]);
+
+    // 음식 리스트를 업데이트하는 함수
+    const handleSaveFood = (addedFoods) => {
+        setAteFoodList(addedFoods);
+    };
+
     return (
         <div className="w-full h-full bg-rookieRed rounded-lg flex items-center justify-center">
-            {/* 내부 박스 */}
-            <div className="relative w-[97%] h-[86vh] bg-white rounded-lg flex">
-                {/* 차트 */}
-                <div className="w-1/2 flex justify-center items-center">
-                    <FoodCharts />
+            <div className="relative w-[97%] h-[86vh] bg-white rounded-lg flex p-6">
+
+                <div className="w-2/3 mb-20 flex justify-center items-center">
+                    {ateFoodList.length > 0 && <FoodChart ateFoodList={ateFoodList} />}
                 </div>
 
                 {/* 세로선 */}
-                <div className="flex items-center justify-center w-0.5">
-                    <div className="h-[70%] w-0.5 bg-gray-200"></div>
-                </div>
-                <div className="relative">
-                    <AteFoodList />
+                <div className="w-0.5 h-[70%] mt-24 bg-gray-200 mx-4"></div>
+
+
+                <div className="w-2/3 mt-24">
+                    <AteFoodList handleSaveFood={handleSaveFood} ateFoodList={ateFoodList} />
                 </div>
             </div>
         </div>

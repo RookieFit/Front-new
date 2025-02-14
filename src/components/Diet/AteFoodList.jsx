@@ -2,26 +2,22 @@ import React, { useState } from 'react';
 import Modal from '../Common/Modal';
 import DietModalComponent from './DietModalComponent';
 
-const AteFoodList = () => {
-	const [ateFoodList, setAteFoodList] = useState([]);
+const AteFoodList = ({ handleSaveFood, ateFoodList }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [expandedIndex, setExpandedIndex] = useState(null);
-
-	// 음식 추가 및 삭제 (저장하기 버튼 클릭 시)
-	const handleSaveFood = (addedFoods) => {
-		setAteFoodList(addedFoods); // 새로 저장된 음식 리스트로 업데이트
-	};
 
 	const toggleDropdown = (index) => {
 		setExpandedIndex(expandedIndex === index ? null : index);
 	};
 
 	return (
-		<div className="ml-12 mt-28 w-[75vh]">
-			<p className="flex ml-4 text-2xl font-bold">오늘 섭취한 식단 리스트</p>
-			<hr className="flex w-full border mt-5" />
+		<div className="w-full flex flex-col items-center min-h-[500px]">
+			{/* 제목 */}
+			<p className="text-2xl font-bold mr-[390px] pl-5">오늘 섭취한 식단 리스트</p>
+			<hr className="w-[90%] border mt-5 mx-auto" />
 
-			<ul className="mt-5 space-y-2 max-h-[400px] overflow-y-auto pr-2">
+			{/* 음식 리스트 */}
+			<ul className="mt-5 space-y-2 max-h-[350px] overflow-auto w-[80%]">
 				{ateFoodList.length === 0 ? (
 					<p className="text-center text-gray-500">추가된 식단이 없습니다.</p>
 				) : (
@@ -45,15 +41,12 @@ const AteFoodList = () => {
 				)}
 			</ul>
 
-			<div className="absolute bottom-28 left-0 w-full flex justify-center">
-				<button
-					className="w-[60%] bg-rookieRed text-white font-semibold py-3 rounded-lg"
-					onClick={() => setIsModalOpen(true)}
-				>
-					식단 검색 및 추가하기
-				</button>
+			{/* 모달 버튼 */}
+			<div className="mt-auto mb-0">
+				<button className="bg-rookieRed text-white font-semibold py-3 px-5 rounded-lg" onClick={() => setIsModalOpen(true)}>식단 검색 및 추가하기</button>
 			</div>
 
+			{/* 모달 */}
 			<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
 				<DietModalComponent
 					setIsModalOpen={setIsModalOpen}

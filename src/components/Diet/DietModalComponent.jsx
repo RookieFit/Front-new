@@ -1,42 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FoodSearchBar from './FoodSearchBar';
 import FoodSearchResult from './FoodSearchResult';
 
-const DietModalComponent = ({ setIsModalOpen }) => {
+const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods = [] }) => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [selectedFood, setSelectedFood] = useState(null);
+	const [addedFoods, setAddedFoods] = useState(initialAddedFoods);
 
-	const handleSearch = (query) => {
-		setSearchTerm(query);
-	};
+	useEffect(() => {
+		setAddedFoods(initialAddedFoods);
+	}, [initialAddedFoods]);
 
-	// 음식을 클릭할 때마다 드롭다운을 토글
 	const handleFoodClick = (food) => {
-		// 선택된 음식이 같으면 닫고, 다르면 열기
 		setSelectedFood(prevFood => (prevFood && prevFood.foodName === food.foodName ? null : food));
 	};
 
-	const handleAddFood = () => {
-		alert('음식이 추가되었습니다!');
+	const handleAddFood = (newFood) => {
+		setAddedFoods((prevFoods) => {
+			// 이미 추가된 음식인지 확인하고 추가(추후 수정 필요)
+			if (!prevFoods.find(food => food.id === newFood.id)) {
+				return [...prevFoods, newFood];
+			}
+			return prevFoods;
+		});
+	};
+
+	const handleRemoveFood = (foodToRemove) => {
+		setAddedFoods((prevFoods) => prevFoods.filter(food => food.id !== foodToRemove.id));
+	};
+
+	const handleSave = () => {
+		handleSaveFood(addedFoods);
+		setIsModalOpen(false);
 	};
 
 	return (
-		<div className="w-[950px] h-[700px] relative flex">
+		<div className="w-[950px] h-[700px] relative flex flex-col p-6">
+			{/* 상단 제목 */}
 			<div className="w-full">
-				<p className="text-2xl ml-12 font-bold">식단검색</p>
-				<hr className="w-[95%] border mt-5 mx-auto" />
+				<p className="text-2xl font-bold ml-3">식단 검색</p>
+				<hr className="w-full border mt-5" />
 			</div>
 
-			{/* 왼쪽 */}
-			<div className="flex-1 p-6 mt-10 ml-[-100%]">
-				<div>
-					{/* 검색바 */}
-					<div className="mt-5">
-						<FoodSearchBar onSearch={handleSearch} searchTerm={searchTerm} />
-					</div>
-
-					{/* 검색결과 */}
-					<div className="mt-5 h-[60%] overflow-auto">
+			{/* 좌우 레이아웃 */}
+			<div className="flex flex-grow mt-5">
+				{/* 왼쪽 */}
+				<div className="w-1/2 flex flex-col h-[51vh] mt-[-1%]">
+					<FoodSearchBar onSearch={setSearchTerm} searchTerm={searchTerm} />
+					<div className="flex-grow overflow-auto mt-4 border p-2 rounded-lg">
 						<FoodSearchResult
 							searchQuery={searchTerm}
 							handleFoodClick={handleFoodClick}
@@ -45,25 +56,43 @@ const DietModalComponent = ({ setIsModalOpen }) => {
 						/>
 					</div>
 				</div>
-			</div>
 
-			{/* 중간 세로선 */}
-			<div className="h-[50%] w-[1px] bg-gray-200 mt-36 mx-2"></div>
+				{/* 중앙 구분선 */}
+				<div className="h-[70%] w-[1px] mt-5 bg-gray-200 mx-6"></div>
 
-			{/* 오른쪽 */}
-			<div className="flex-1 p-6">
-				<div className="h-full flex justify-center items-center">
+				{/* 오른쪽 */}
+				<div className="w-1/2 h-[50vh] bg-gray-100 p-4 overflow-auto rounded-lg">
+					<h3 className="text-xl font-semibold mb-4">추가된 음식 리스트</h3>
+					<ul>
+						{addedFoods.length === 0 ? (
+							<p className="text-center text-gray-500">음식이 없습니다.</p>
+						) : (
+							addedFoods.map((food) => (
+								<li key={food.foodName} className="mb-2 p-3 border-b flex justify-between items-center">
+									<div>
+										<div className="font-semibold">{food.foodName}</div>
+										<div className="text-sm">칼로리: {food.enerc} kcal</div>
+										<div className="text-sm">탄수화물: {food.chocdf} g</div>
+										<div className="text-sm">단백질: {food.prot} g</div>
+										<div className="text-sm">지방: {food.fatce} g</div>
+									</div>
+									<button
+										className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-700"
+										onClick={() => handleRemoveFood(food)}
+									>
+										삭제
+									</button>
+								</li>
+							))
+						)}
+					</ul>
 				</div>
 			</div>
 
-			{/* 닫기 버튼 */}
-			<div className="absolute bottom-5 left-0 w-full flex justify-center">
-				<button
-					className="bg-white rounded-lg text-gray-700 border-2 w-1/6 px-4 py-2 hover:opacity-50"
-					onClick={() => setIsModalOpen(false)}
-				>
-					닫기
-				</button>
+			{/* 하단 버튼 */}
+			<div className="absolute bottom-10 left-0 w-full flex justify-center">
+				<button className="bg-white rounded-lg text-gray-700 border-2 w-1/6 px-4 py-2 hover:opacity-50" onClick={() => setIsModalOpen(false)}>닫기</button>
+				<button className="bg-rookieRed rounded-lg text-white border-2 w-1/6 px-4 py-2 ml-4 hover:opacity-80" onClick={handleSave}>저장하기</button>
 			</div>
 		</div>
 	);

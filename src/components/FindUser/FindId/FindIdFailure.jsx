@@ -2,16 +2,21 @@ import React from "react";
 
 const FindIdFailure = () => {
     return (
-        <div>
-            <h2 className="text-xl font-bold mb-4">아이디 찾기 실패</h2>
-            <p>회원님의 명의로 가입된 아이디가 없습니다.</p>
-            <div className="mt-4">
-                <button className="bg-green-500 text-white px-4 py-2 rounded mr-2">
-                    회원가입
-                </button>
-                <button className="bg-gray-500 text-white px-4 py-2 rounded">
-                    홈으로 이동
-                </button>
+        <div className="w-full max-w-md p-4">
+            <div className="border border-gray-300 rounded-lg p-10 mb-5 flex flex-col items-center justify-center">
+                <p className="text-center">
+                    회원님의 명의로 가입된 아이디가 없습니다.
+                </p>
+            </div>
+            <div className="mt-4 flex justify-center w-full">
+                <div className="flex justify-between w-11/12">
+                    <button className="bg-rookieRed text-white px-4 py-2 rounded-md w-1/2 mr-2">
+                        회원가입
+                    </button>
+                    <button className="bg-white border border-rookieRed text-rookieRed px-4 py-2 rounded-md w-1/2">
+                        홈으로 이동
+                    </button>
+                </div>
             </div>
         </div>
     );

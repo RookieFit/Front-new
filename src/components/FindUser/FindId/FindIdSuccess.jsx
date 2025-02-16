@@ -6,15 +6,15 @@ const FindIdSuccess = ({ userId }) => {
     const maskedUserId = userId.slice(0, -3) + '***';
 
     return (
-        <div className="w-full max-w-lg p-4">
-            <h2 className="text-sm font-bold mb-14 text-center">아이디 찾기가 완료되었습니다.</h2>
+        <div className="w-full max-w-md p-4">
+            <h2 className="text-sm font-bold mb-12 text-center">아이디 찾기가 완료되었습니다.</h2>
             <div className="border border-gray-300 rounded-lg p-14 mb-5 flex flex-col items-center justify-center">
                 <p className="text-center">
                     회원님의 아이디는 <br /> <span className="font-bold underline">{maskedUserId}</span> 입니다.
                 </p>
             </div>
             <div className="mt-4 flex justify-center w-full">
-                <div className="flex justify-between w-10/12">
+                <div className="flex justify-between w-11/12">
                     <button className="bg-rookieRed text-white px-4 py-2 rounded-md w-1/2 mr-2">
                         로그인
                     </button>

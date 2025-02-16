@@ -29,7 +29,7 @@ const FindPage = () => {
             {/* 왼쪽: 아이디 찾기 결과 */}
             <div className="flex flex-col items-center justify-center w-2/5 bg-white">
                 <header>
-                    <h1 className="text-7xl font-bold text-center mb-24 text-rookieRed">
+                    <h1 className="text-7xl font-bold text-center mb-16 text-rookieRed">
                         Find ID
                     </h1>
                 </header>

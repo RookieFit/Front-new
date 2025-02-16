@@ -1,7 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const FindIdSuccess = ({ userId }) => {
+    const navigate = useNavigate();
+
+    const handleLogin = () => {
+        navigate("/login");
+    };
+
     // 아이디의 마지막 세 글자를 별표로 대체
     const maskedUserId = userId.slice(0, -3) + '***';
 
@@ -15,7 +22,10 @@ const FindIdSuccess = ({ userId }) => {
             </div>
             <div className="mt-4 flex justify-center w-full">
                 <div className="flex justify-between w-11/12">
-                    <button className="bg-rookieRed text-white px-4 py-2 rounded-md w-1/2 mr-2">
+                    <button
+                        className="bg-rookieRed text-white px-4 py-2 rounded-md w-1/2 mr-2"
+                        onClick={handleLogin}
+                    >
                         로그인
                     </button>
                     <button className="bg-white border border-rookieRed text-rookieRed px-4 py-2 rounded-md w-1/2">

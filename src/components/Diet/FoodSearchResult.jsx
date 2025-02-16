@@ -16,7 +16,6 @@ const FoodSearchResult = ({
 		{ id: 7, foodName: "연어", enerc: 208, chocdf: 0, prot: 20, fatce: 13 }
 	];
 
-
 	const filteredFoods = foodData.filter((food) =>
 		food.foodName.toLowerCase().includes(searchQuery.toLowerCase())
 	);

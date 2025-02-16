@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
-const FoodChart = () => {
+const FoodChart = ({ ateFoodList }) => {
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [showCalendar, setShowCalendar] = useState(false);
 
@@ -14,9 +14,28 @@ const FoodChart = () => {
 		return format(date, "yyyy-MM-dd (EEE)", { locale: ko });
 	};
 
+	// 영양소 합계 계산
+	const calculateNutrition = () => {
+		let carbs = 0;
+		let protein = 0;
+		let fat = 0;
+
+		// ateFoodList가 비어 있지 않은지 확인
+		if (ateFoodList && ateFoodList.length > 0) {
+			ateFoodList.forEach((food) => {
+				carbs += food.chocdf || 0;
+				protein += food.prot || 0;
+				fat += food.fatce || 0;
+			});
+		}
+
+		return [carbs, protein, fat];
+	};
+
 	// 차트 데이터
+	const nutritionData = calculateNutrition();
 	const data = {
-		series: [40, 30, 30],
+		series: nutritionData,
 		options: {
 			chart: {
 				type: "donut",
@@ -47,10 +66,7 @@ const FoodChart = () => {
 		<div className="max-w-lg mx-auto mt-10 p-4 bg-white rounded-lg flex flex-col items-center relative">
 			<div className="mb-4 flex items-center gap-2">
 				<h2 className="text-xl font-bold">{formatDate(selectedDate)}</h2>
-				<button
-					onClick={() => setShowCalendar(!showCalendar)}
-					className="text-xl"
-				>
+				<button onClick={() => setShowCalendar(!showCalendar)} className="text-xl">
 					📆
 				</button>
 			</div>
@@ -72,13 +88,9 @@ const FoodChart = () => {
 				</div>
 			)}
 
-			{/* 도넛 차트 */}
-			<Chart
-				options={data.options}
-				series={data.series}
-				type="donut"
-				width="200%"
-			/>
+			{nutritionData.length > 0 && (
+				<Chart options={data.options} series={data.series} type="donut" width="200%" />
+			)}
 		</div>
 	);
 };

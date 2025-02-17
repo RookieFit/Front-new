@@ -8,7 +8,7 @@ import Diet from "../components/Diet/Diet";
 import CommunityPage from "../pages/Community/CommunityPage";
 import CommunityEditor from "../components/Community/CommunityEditor";
 import SignUpPage from "../pages/SignUp/SignUpPage";
-
+import FindPage from "../pages/Find/FindPage";
 
 const router = createBrowserRouter([
     {
@@ -48,6 +48,10 @@ const router = createBrowserRouter([
     {
         path: "/signup",
         element: <SignUpPage />,
+    },
+    {
+        path: "/findid",
+        element: <FindPage />,
     },
 ]);
 

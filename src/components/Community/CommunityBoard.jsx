@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Pagination from '../Common/Pagination';
 import writeImage from '../assets/images/community-write-image.png';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const CommunityBoard = () => {
 
@@ -11,7 +11,13 @@ const CommunityBoard = () => {
         '전체', '바프', '일상', '등등', '기타'
     ];
     const boardList = useMemo(() => [
-        //게시글리스트
+        {
+            communityId: 1,
+            boardType: '바프',
+            boardTitle: '제목입니다.',
+            boardAuthor: '작성자',
+            boardCreatedAt: '2025/02/15 12:20'
+        }
     ], []);
 
     const [selectedType, setSelectedType] = useState('전체');
@@ -54,12 +60,14 @@ const CommunityBoard = () => {
                 </div>
                 <div className='w-3/4 mt-4'>
                     {paginatedBoards.map((board, index) => (
-                        <div key={index} className={`flex flex-row m-3 gap-10 ${index !== paginatedBoards.length - 1 ? 'border-b border-gray-300 pb-2' : ''}`}>
-                            <p className='ml-3 w-[25px]'>{board.id}</p>
-                            <p>[{board.boardType}]</p>
-                            <p className='w-1/2'>{board.boardTitle}</p>
-                            <p>{board.boardAuthor}</p>
-                            <p>{board.boardCreatedAt}</p>
+                        <div key={index}>
+                            <Link to={`/community/${board.id}`} className={`flex flex-row m-3 gap-10 ${index !== paginatedBoards.length - 1 ? 'border-b border-gray-300 pb-2' : ''}`}>
+                                <p className='ml-3 w-[25px]'>{board.id}</p>
+                                <p>[{board.boardType}]</p>
+                                <p className='w-1/2'>{board.boardTitle}</p>
+                                <p>{board.boardAuthor}</p>
+                                <p>{board.boardCreatedAt}</p>
+                            </Link>
                         </div>
                     ))}
                 </div>

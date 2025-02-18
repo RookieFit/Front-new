@@ -8,6 +8,7 @@ import Diet from "../components/Diet/Diet";
 import CommunityPage from "../pages/Community/CommunityPage";
 import CommunityEditor from "../components/Community/CommunityEditor";
 import SignUpPage from "../pages/SignUp/SignUpPage";
+import CommunityDetail from "../components/Community/CommunityDetail";
 
 
 const router = createBrowserRouter([
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
             {
                 path: "/community",
                 element: <CommunityPage />,
+            },
+            {
+                path: "/community/:id",
+                element: <CommunityDetail />,
             },
             {
                 path: "/editor",

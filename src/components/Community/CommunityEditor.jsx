@@ -48,6 +48,7 @@ const CommunityEditor = () => {
                     navigate('/community'); // 저장 후 이동
                 }
             }*/
+            console.log("title: " + title + "/" + "content: " + content);
             alert("게시글이 저장되었습니다!");
             navigate('/community');
         } catch (error) {

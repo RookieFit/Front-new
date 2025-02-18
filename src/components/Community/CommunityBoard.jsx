@@ -61,7 +61,7 @@ const CommunityBoard = () => {
                 <div className='w-3/4 mt-4'>
                     {paginatedBoards.map((board, index) => (
                         <div key={index}>
-                            <Link to={`/community/${board.id}`} className={`flex flex-row m-3 gap-10 ${index !== paginatedBoards.length - 1 ? 'border-b border-gray-300 pb-2' : ''}`}>
+                            <Link to={`/community/${board.communityId}`} className={`flex flex-row m-3 gap-10 ${index !== paginatedBoards.length - 1 ? 'border-b border-gray-300 pb-2' : ''}`}>
                                 <p className='ml-3 w-[25px]'>{board.id}</p>
                                 <p>[{board.boardType}]</p>
                                 <p className='w-1/2'>{board.boardTitle}</p>

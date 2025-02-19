@@ -4,6 +4,7 @@ export const menuItems = [
         path: "",
         subItems: [
             { name: "마이페이지", path: "/mypage" },
+            { name: "ToDo List", path: "/todolist" },
         ],
     },
     {

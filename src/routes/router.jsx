@@ -10,6 +10,7 @@ import CommunityEditor from "../components/Community/CommunityEditor";
 import SignUpPage from "../pages/SignUp/SignUpPage";
 import CommunityDetail from "../components/Community/CommunityDetail";
 import FindPage from "../pages/Find/FindPage";
+import TodoList from "../components/ToDoList/TodoList";
 
 const router = createBrowserRouter([
     {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
             {
                 path: "/diet",
                 element: <Diet />,
+            },
+            {
+                path: "/todolist",
+                element: <TodoList />,
             },
         ],
     },

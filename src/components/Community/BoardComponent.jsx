@@ -1,32 +1,34 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import PropTypes from "prop-types";
 import Pagination from '../Common/Pagination';
 import writeImage from '../assets/images/community-write-image.png';
 
 const BoardComponent = ({ boardTypeList = [], boardList = [] }) => {
+    const navigate = useNavigate();
 
     const [selectedType, setSelectedType] = useState('전체');
-    const [filteredBoardList, setFilteredBoardList] = useState(boardList || []);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
-    useEffect(() => {
-        const filtered = selectedType === '전체'
-            ? (boardList || [])
-            : (boardList || []).filter((board) => board.boardType === selectedType);
-        setFilteredBoardList(filtered);
-        setCurrentPage(1);
-    }, [selectedType, boardList]);
+    const filteredBoardList = useMemo(() => {
+        return selectedType === '전체'
+            ? boardList
+            : boardList.filter((board) => board.boardType === selectedType);
+    }, [boardList, selectedType]);
 
-    const paginatedBoards = (filteredBoardList || []).slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
+    const paginatedBoards = useMemo(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        return filteredBoardList.slice(start, start + itemsPerPage);
+    }, [filteredBoardList, currentPage]);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedType]);
 
     const handlePosts = () => {
         alert('글쓰러가기');
-        navigator('/editor');
+        navigate('/editor');
     };
 
     return (

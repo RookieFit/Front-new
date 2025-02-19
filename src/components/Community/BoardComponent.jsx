@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from "prop-types";
 import Pagination from '../Common/Pagination';
 import writeImage from '../assets/images/community-write-image.png';

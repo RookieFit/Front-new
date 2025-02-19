@@ -1,11 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import BoardComponent from './BoardComponent';
 
-const CommunityBoard = () => {
-
-    const boardTypeList = [
-        '전체', '바프', '일상', '등등', '기타'
-    ];
+const MyCommunityBoard = () => {
     const boardList = useMemo(() => [
         {
             communityId: 1,
@@ -44,7 +40,7 @@ const CommunityBoard = () => {
         },
         {
             communityId: 6,
-            boardType: '등등',
+            boardType: '바프',
             boardTitle: '제목입니다.',
             boardAuthor: '작성자',
             boardCreatedAt: '2025/02/15 12:20'
@@ -93,7 +89,7 @@ const CommunityBoard = () => {
         },
         {
             communityId: 13,
-            boardType: '등등',
+            boardType: '바프',
             boardTitle: '제목입니다.',
             boardAuthor: '작성자',
             boardCreatedAt: '2025/02/15 12:20'
@@ -142,7 +138,7 @@ const CommunityBoard = () => {
         },
         {
             communityId: 20,
-            boardType: '등등',
+            boardType: '바프',
             boardTitle: '제목입니다.',
             boardAuthor: '작성자',
             boardCreatedAt: '2025/02/15 12:20'
@@ -155,12 +151,15 @@ const CommunityBoard = () => {
             boardCreatedAt: '2025/02/15 12:20'
         },
     ], []);
-
+    const boardTypeList = useMemo(() => {
+        const types = boardList.map((board) => board.boardType);
+        return ['전체', ...Array.from(new Set(types))];
+    }, [boardList]);
     return (
         <div>
-            <BoardComponent boardTypeList={boardTypeList} boardList={boardList} />
+            <BoardComponent boardList={boardList} boardTypeList={boardTypeList} />
         </div>
     );
 };
 
-export default CommunityBoard;
+export default MyCommunityBoard;

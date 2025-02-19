@@ -10,8 +10,7 @@ import CommunityEditor from "../components/Community/CommunityEditor";
 import SignUpPage from "../pages/SignUp/SignUpPage";
 import CommunityDetail from "../components/Community/CommunityDetail";
 import FindPage from "../pages/Find/FindPage";
-import TodoList from "../components/TODOLISTST/TodoList";
-
+import TodoList from "../components/Todo/TodoList";
 
 const router = createBrowserRouter([
     {

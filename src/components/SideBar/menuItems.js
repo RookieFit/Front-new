@@ -26,6 +26,7 @@ export const menuItems = [
         path: "",
         subItems: [
             { name: "커뮤니티", path: "/community" },
+            { name: "내 게시글", path: "/mycommunity" },
         ],
     },
     {

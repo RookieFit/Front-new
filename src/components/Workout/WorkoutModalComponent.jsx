@@ -75,6 +75,7 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
 
     const handleSaveWorkoutData = () => {
         console.log(workoutDetailList);
+        console.log(workout);
         setIsOpen(false);
         alert("저장되었습니다");
     };

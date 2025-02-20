@@ -14,24 +14,9 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
             workoutTitle: '제목입니다',
             workoutComment: '내용입니다',
             workoutImageUris: [],
-            workoutCreatedDate: '250221'
+            workoutCreatedDate: '2025-02-21'
         }
     ]);
-
-    // 날짜 변환 함수 (YYMMDD -> YYYY-MM-DD)
-    const formatDate = (shortDate) => {
-        return `20${shortDate.slice(0, 2)}-${shortDate.slice(2, 4)}-${shortDate.slice(4)}`;
-    };
-
-    // 날짜 변환 함수 (YYMMDD -> YYYY-MM-DD)
-    const formatDatetoselect = (date) => {
-        `20${date.slice(0, 2)}-${date.slice(2, 4)}-${date.slice(4)}`;
-        if (date.includes('-')) {
-            return date;
-        }
-        const format = date.substring(2,);
-        return `20${format}`;
-    };
 
     /*useEffect(() => {
         const fetchWorkoutList = async () => {
@@ -72,7 +57,7 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
         // workoutList가 변경될 때마다 실행
         const workoutEvents = workoutList.map(workout => ({
             title: workout.workoutTitle,
-            date: formatDate(workout.workoutCreatedDate),
+            date: workout.workoutCreatedDate,
             color: "blue",
             type: "workout",
             comment: workout.workoutComment,
@@ -86,7 +71,7 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
     // 날짜 클릭 시 실행되는 함수
     const handleSelectDate = (date) => {
         setIsOpen(true);
-        setSelectedDate(formatDatetoselect(date));
+        setSelectedDate(date);
 
         // 해당 날짜의 모든 이벤트 가져오기
         const matchedEvents = events.filter(event => event.date === date);

@@ -1,15 +1,15 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
-const EditWorkoutList = () => {
-    // 운동 리스트 (입력 완료된 항목들)
-    const [workoutList, setWorkoutList] = useState([]);
+const EditWorkoutList = ({ setWorkoutDetailList, workoutDetailList, selectedDate }) => {
 
     // 현재 입력 중인 운동 데이터
     const [inputForm, setInputForm] = useState({
         workoutName: '',
         reps: '',
         sets: '',
-        restTime: ''
+        restTime: '',
+        workoutCreatedDate: selectedDate
     });
 
     // 입력값 변경 핸들러
@@ -24,7 +24,7 @@ const EditWorkoutList = () => {
     const addWorkout = () => {
         // 빈 값이 아닌 경우에만 추가
         if (inputForm.workoutName.trim()) {
-            setWorkoutList((prev) => [...prev, inputForm]);
+            setWorkoutDetailList((prev) => [...prev, inputForm]);
             setInputForm({ workoutName: '', reps: '', sets: '', restTime: '' }); // 입력 필드 초기화
         }
     };
@@ -60,7 +60,7 @@ const EditWorkoutList = () => {
             </header>
 
             <div className="mt-5 border-t-2 border-gray-300 pt-3">
-                {workoutList.map((workout, index) => (
+                {workoutDetailList.map((workout, index) => (
                     <div key={index} className="flex flex-row justify-around items-center p-2 border-b">
                         <p className="w-1/4 text-center">{workout.workoutName || '-'}</p>
                         <p className="w-1/4 text-center">{workout.reps || '-'}</p>
@@ -71,6 +71,12 @@ const EditWorkoutList = () => {
             </div>
         </div>
     );
+};
+
+EditWorkoutList.propTypes = {
+    setWorkoutDetailList: PropTypes.func.isRequired,
+    workoutDetailList: PropTypes.array.isRequired,
+    selectedDate: PropTypes.string.isRequired
 };
 
 export default EditWorkoutList;

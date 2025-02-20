@@ -9,8 +9,14 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
     const [currentIndex, setCurrentIndex] = useState(0);
     const [workoutDetailList, setWorkoutDetailList] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
+    const [workout, setWorkout] = useState({
+        workoutTitle: title || '',
+        workoutComment: comment || '',
+        workoutImageUris: imageList || [],
+        workoutCreatedDate: selectedDate
+    });
 
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchWorkoutDetailList = async () => {
             try {
                 const response = await ApiClient.get(
@@ -30,7 +36,7 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
         };
 
         fetchWorkoutDetailList();
-    }, [selectedDate]);
+    }, [selectedDate]);*/
 
     const [dietList, setDietList] = useState([
         {
@@ -67,11 +73,17 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
         );
     };
 
+    const handleSaveWorkoutData = () => {
+        console.log(workoutDetailList);
+        setIsOpen(false);
+        alert("저장되었습니다");
+    };
+
     return (
         <div className="w-[950px] h-[700px]">
             {/* 헤더 */}
             <header className="flex flex-col mb-5 ml-5">
-                {title ? <h1 className="text-2xl font-bold">{title}</h1> :
+                {workout.workoutTitle ? <h1 className="text-2xl font-bold">{workout.workoutTitle}</h1> :
                     <input
                         className='border-2 w-[200px] text-lg pl-2'
                         placeholder='제목을 입력해주세요'
@@ -88,10 +100,10 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
                 <div className="flex flex-col items-center w-1/2">
                     <div className="flex items-center gap-3">
                         <button className="bg-red-300 text-white rounded-full w-8 h-8 flex items-center justify-center" onClick={moveLeft}>&lt;</button>
-                        <img src={imageList[currentIndex]} className="w-[250px] h-[250px] my-5 object-cover rounded-lg" />
+                        <img src={workout.workoutImageUris[currentIndex]} className="w-[250px] h-[250px] my-5 object-cover rounded-lg" />
                         <button className="bg-red-300 text-white rounded-full w-8 h-8 flex items-center justify-center" onClick={moveRight}>&gt;</button>
                     </div>
-                    {comment ? <p className="mt-3">{comment}</p> :
+                    {workout.workoutComment ? <p className="mt-3">{workout.workoutComment}</p> :
                         <textarea
                             placeholder='자유로운 글을 작성해보세요'
                             type='text'
@@ -109,7 +121,11 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
 
                 {/* 오른쪽 (운동일지 & 식단) */}
                 <div className="flex flex-col justify-center h-full w-1/2">
-                    {isEdit ? (<EditWorkoutList />) :
+                    {isEdit ? (<EditWorkoutList
+                        setWorkoutDetailList={setWorkoutDetailList}
+                        workoutDetailList={workoutDetailList}
+                        selectedDate={selectedDate}
+                    />) :
                         (<div>
                             {workoutDetailList.length > 0 ? <div className="mb-3 border-2 border-solid border-gray-300 p-5">
                                 <p className="text-lg h-1/2 font-semibold text-center overflow-y-auto mb-5">운동일지</p>
@@ -141,9 +157,19 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
             {/* 푸터 */}
             <footer className="mt-5 flex justify-center gap-10 w-full">
                 <button className="bg-white rounded-lg text-gray-700 border-2 w-1/6 px-4 py-2 hover:opacity-50" onClick={() => setIsOpen(false)}>닫기</button>
-                {title || comment || workoutDetailList.length ?
-                    <button className="bg-gray-500 rounded-lg text-white px-4 py-2 w-1/6 hover:opacity-50">수정하기</button> :
-                    <button className="bg-gray-500 rounded-lg text-white px-4 py-2 w-1/6 hover:opacity-50">저장하기</button>
+                {!isEdit ?
+                    <button
+                        className="bg-gray-500 rounded-lg text-white px-4 py-2 w-1/6 hover:opacity-50"
+                        onClick={() => setIsEdit(true)}
+                    >
+                        수정하기
+                    </button> :
+                    <button
+                        className="bg-gray-500 rounded-lg text-white px-4 py-2 w-1/6 hover:opacity-50"
+                        onClick={handleSaveWorkoutData}
+                    >
+                        저장하기
+                    </button>
                 }
             </footer>
         </div>

@@ -9,21 +9,31 @@ import ApiClient from '../../services/ApiClient';
 const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, setImageList }) => {
 
     const [events, setEvents] = useState([]);
-    const [workoutList, setWorkoutList] = useState([]);
+    const [workoutList, setWorkoutList] = useState([
+        {
+            workoutTitle: '제목입니다',
+            workoutComment: '내용입니다',
+            workoutImageUris: [],
+            workoutCreatedDate: '250221'
+        }
+    ]);
 
     // 날짜 변환 함수 (YYMMDD -> YYYY-MM-DD)
     const formatDate = (shortDate) => {
-        const format = `20${shortDate}`;
-        return `${format}`;
+        return `20${shortDate.slice(0, 2)}-${shortDate.slice(2, 4)}-${shortDate.slice(4)}`;
     };
 
     // 날짜 변환 함수 (YYMMDD -> YYYY-MM-DD)
     const formatDatetoselect = (date) => {
+        `20${date.slice(0, 2)}-${date.slice(2, 4)}-${date.slice(4)}`;
+        if (date.includes('-')) {
+            return date;
+        }
         const format = date.substring(2,);
-        return `${format}`;
+        return `20${format}`;
     };
 
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchWorkoutList = async () => {
             try {
                 const response = await ApiClient.get(
@@ -44,8 +54,9 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
         };
 
         fetchWorkoutList();
-    }, []); // 컴포넌트 마운트 시 한 번 실행
+    }, []); // 컴포넌트 마운트 시 한 번 실행*/
 
+    //todo: 공휴일 api 끌고와서 연결하기
     useEffect(() => {
         const koreanHolidays = [
             { title: "신정", date: "2025-01-01", color: "green", type: "holiday" },
@@ -60,12 +71,12 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
 
         // workoutList가 변경될 때마다 실행
         const workoutEvents = workoutList.map(workout => ({
-            title: workout.workout_title,
-            date: formatDate(workout.workoutCreatedData),
+            title: workout.workoutTitle,
+            date: formatDate(workout.workoutCreatedDate),
             color: "blue",
             type: "workout",
-            comment: workout.comment,
-            imageUris: workout.imageUris,
+            comment: workout.workoutComment,
+            imageUris: workout.workoutImageUris
         }));
 
         // 새로운 이벤트 리스트 설정

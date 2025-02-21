@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import ApiClient from '../../services/ApiClient';
 import WorkoutDietSection from './WorkoutDietSection';
@@ -6,8 +6,12 @@ import WorkoutDisableDietSection from './WorkoutDisableDietSection';
 import EditWorkoutList from './EditWorkoutDetailList';
 import EditWorkout from './EditWorkout';
 import CreateWorkout from './CreateWorkout';
+import { calculateCaloriesBurned } from '../Common/CalculateCaloriesBurned';
 
 const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageList }) => {
+
+    //todo: userinfo의 기초대사량 백에서 가져오기
+    const userBMR = 1500;
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [workoutDetailList, setWorkoutDetailList] = useState([]);
@@ -16,7 +20,8 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
         workoutTitle: title || '',
         workoutComment: comment || '',
         workoutImageUris: imageList || [],
-        workoutCreatedDate: selectedDate
+        workoutCreatedDate: selectedDate,
+        dailyCaloriesBurned: 0
     });
 
     /*useEffect(() => {
@@ -76,6 +81,14 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
         );
     };
 
+    useEffect(() => {
+        setWorkout((prev) => ({
+            ...prev,
+            dailyCaloriesBurned: calculateCaloriesBurned(userBMR, workoutDetailList.length),
+        }));
+    }, [workoutDetailList, userBMR]);
+
+    //todo: workoutdetaillist와 workout 수정사항 저장
     const handleSaveWorkoutData = () => {
         console.log(workoutDetailList);
         console.log(workout);
@@ -84,11 +97,15 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
     };
 
     return (<>
-        {workoutDetailList.length === 0 && !title ?
+        {!title && workoutDetailList.length === 0 ?
             (
                 //title과 운동기록이 없을 시 새로입력
                 <div>
-                    <CreateWorkout selectedDate={selectedDate} setIsOpen={setIsOpen} />
+                    <CreateWorkout
+                        selectedDate={selectedDate}
+                        setIsOpen={setIsOpen}
+                        userBMR={userBMR}
+                    />
                 </div>
             )
             :

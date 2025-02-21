@@ -1,19 +1,31 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EditWorkout from './EditWorkout';
 import EditWorkoutList from './EditWorkoutDetailList';
+import { calculateCaloriesBurned } from '../Common/CalculateCaloriesBurned';
 
-const CreateWorkout = ({ selectedDate, setIsOpen }) => {
+const CreateWorkout = ({ selectedDate, setIsOpen, userBMR }) => {
+
     const [workoutDetailList, setWorkoutDetailList] = useState([]);
     const [workout, setWorkout] = useState({
         workoutTitle: '',
         workoutComment: '',
         workoutImageUris: [],
-        workoutCreatedDate: selectedDate
+        workoutCreatedDate: selectedDate,
+        dailyCaloriesBurned: 0
     });
+
     const handleTitleChange = (e) => {
         setWorkout((prev) => ({ ...prev, workoutTitle: e.target.value }));
     };
+
+    useEffect(() => {
+        setWorkout((prev) => ({
+            ...prev,
+            dailyCaloriesBurned: calculateCaloriesBurned(userBMR, workoutDetailList.length),
+        }));
+    }, [workoutDetailList, userBMR]);
+
     //todo: workdoutlist와 detail create에 저장
     const handleSaveWorkoutData = () => {
         if (!workout.workoutTitle.trim()) {
@@ -28,6 +40,7 @@ const CreateWorkout = ({ selectedDate, setIsOpen }) => {
         setIsOpen(false);
         alert("저장되었습니다");
     };
+
     return (
         <div className="w-[950px] h-[700px]">
             <header className="flex flex-col mb-5 ml-5">
@@ -79,6 +92,7 @@ const CreateWorkout = ({ selectedDate, setIsOpen }) => {
 CreateWorkout.propTypes = {
     selectedDate: PropTypes.string.isRequired,
     setIsOpen: PropTypes.func.isRequired,
+    userBMR: PropTypes.number.isRequired
 };
 
 export default CreateWorkout;

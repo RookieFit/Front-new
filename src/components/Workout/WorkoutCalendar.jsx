@@ -13,7 +13,9 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
         {
             workoutTitle: '제목입니다',
             workoutComment: '내용입니다',
-            workoutImageUris: [],
+            workoutImageUris: [
+
+            ],
             workoutCreatedDate: '2025-02-21'
         }
     ]);
@@ -82,15 +84,6 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
             setTitle(workoutEvent.title);
             setComment(workoutEvent.comment);
             setImageList(workoutEvent.imageUris);
-            return;
-        }
-
-        //운동 일정이 없고 공휴일만 있으면 공휴일 제목 설정 (댓글 & 이미지 리스트는 빈 값)
-        const holidayEvent = matchedEvents.find(event => event.type === "holiday");
-        if (holidayEvent) {
-            setTitle(holidayEvent.title);
-            setComment("");
-            setImageList([]);
             return;
         }
 

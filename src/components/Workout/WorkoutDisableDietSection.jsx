@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useNavigate } from 'react-router-dom';
 
 function WorkoutDisableDietSection({ dietList }) {
-    const naviagator = useNavigate();
+    const navigator = useNavigate();
     return (
         <div
             className="mb-3 relative"
@@ -25,7 +25,7 @@ function WorkoutDisableDietSection({ dietList }) {
                 <div
                     className="cursor-pointer text-blue-500 mt-4 text-center z-20"
                     style={{ pointerEvents: 'auto' }}
-                    onClick={() => naviagator('/diet')}  // 식단 페이지로 이동
+                    onClick={() => navigator('/diet')}  // 식단 페이지로 이동
                 >
                     식단 페이지로 이동 &gt;&gt;
                 </div>

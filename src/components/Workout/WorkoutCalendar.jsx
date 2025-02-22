@@ -9,21 +9,18 @@ import ApiClient from '../../services/ApiClient';
 const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, setImageList }) => {
 
     const [events, setEvents] = useState([]);
-    const [workoutList, setWorkoutList] = useState([]);
+    const [workoutList, setWorkoutList] = useState([
+        {
+            workoutTitle: '제목입니다',
+            workoutComment: '내용입니다',
+            workoutImageUris: [
 
-    // 날짜 변환 함수 (YYMMDD -> YYYY-MM-DD)
-    const formatDate = (shortDate) => {
-        const format = `20${shortDate}`;
-        return `${format}`;
-    };
+            ],
+            workoutCreatedDate: '2025-02-21'
+        }
+    ]);
 
-    // 날짜 변환 함수 (YYMMDD -> YYYY-MM-DD)
-    const formatDatetoselect = (date) => {
-        const format = date.substring(2,);
-        return `${format}`;
-    };
-
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchWorkoutList = async () => {
             try {
                 const response = await ApiClient.get(
@@ -44,8 +41,9 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
         };
 
         fetchWorkoutList();
-    }, []); // 컴포넌트 마운트 시 한 번 실행
+    }, []); // 컴포넌트 마운트 시 한 번 실행*/
 
+    //todo: 공휴일 api 끌고와서 연결하기
     useEffect(() => {
         const koreanHolidays = [
             { title: "신정", date: "2025-01-01", color: "green", type: "holiday" },
@@ -60,12 +58,12 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
 
         // workoutList가 변경될 때마다 실행
         const workoutEvents = workoutList.map(workout => ({
-            title: workout.workout_title,
-            date: formatDate(workout.workoutCreatedData),
+            title: workout.workoutTitle,
+            date: workout.workoutCreatedDate,
             color: "blue",
             type: "workout",
-            comment: workout.comment,
-            imageUris: workout.imageUris,
+            comment: workout.workoutComment,
+            imageUris: workout.workoutImageUris
         }));
 
         // 새로운 이벤트 리스트 설정
@@ -75,7 +73,7 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
     // 날짜 클릭 시 실행되는 함수
     const handleSelectDate = (date) => {
         setIsOpen(true);
-        setSelectedDate(formatDatetoselect(date));
+        setSelectedDate(date);
 
         // 해당 날짜의 모든 이벤트 가져오기
         const matchedEvents = events.filter(event => event.date === date);
@@ -86,15 +84,6 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
             setTitle(workoutEvent.title);
             setComment(workoutEvent.comment);
             setImageList(workoutEvent.imageUris);
-            return;
-        }
-
-        //운동 일정이 없고 공휴일만 있으면 공휴일 제목 설정 (댓글 & 이미지 리스트는 빈 값)
-        const holidayEvent = matchedEvents.find(event => event.type === "holiday");
-        if (holidayEvent) {
-            setTitle(holidayEvent.title);
-            setComment("");
-            setImageList([]);
             return;
         }
 

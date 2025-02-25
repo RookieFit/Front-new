@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import EditWorkout from './EditWorkout';
 import EditWorkoutList from './EditWorkoutDetailList';
 import { calculateCaloriesBurned } from '../Common/CalculateCaloriesBurned';
+import ApiClient from '../../services/ApiClient';
 
 const CreateWorkout = ({ selectedDate, setIsOpen, userBMR }) => {
 
@@ -10,10 +11,10 @@ const CreateWorkout = ({ selectedDate, setIsOpen, userBMR }) => {
     const [workout, setWorkout] = useState({
         workoutTitle: '',
         workoutComment: '',
-        workoutImageUris: [],
         workoutCreatedDate: selectedDate,
         dailyCaloriesBurned: 0
     });
+    const [workoutImageUris, setWorkoutImageUris] = useState([]);
 
     const handleTitleChange = (e) => {
         setWorkout((prev) => ({ ...prev, workoutTitle: e.target.value }));
@@ -27,7 +28,7 @@ const CreateWorkout = ({ selectedDate, setIsOpen, userBMR }) => {
     }, [workoutDetailList, userBMR]);
 
     //todo: workdoutlist와 detail create에 저장
-    const handleSaveWorkoutData = () => {
+    const handleSaveWorkoutData = async () => {
         if (!workout.workoutTitle.trim()) {
             alert("제목을 입력해주세요");
             return;
@@ -35,8 +36,31 @@ const CreateWorkout = ({ selectedDate, setIsOpen, userBMR }) => {
             alert("내용을 입력해주세요");
             return;
         };
-        console.log(workoutDetailList);
-        console.log(workout);
+        const workoutData = {
+            ...workout,
+            workoutDetails: workoutDetailList,
+        };
+        console.log("전송할 데이터:", workoutData);
+        const newFiles = workoutImageUris.filter(img => img instanceof File);
+        try {
+            const formData = new FormData();
+            formData.append(
+                "workout",
+                new Blob([JSON.stringify(workoutData)], { type: "application/json" })
+            );
+            newFiles.forEach((file) => {
+                formData.append("images", file); // 여러 이미지 첨부
+            });
+
+            const response = await ApiClient.post(
+                "user/workout/create",
+                formData,
+                { headers: { "Content-Type": "multipart/form-data" } }
+            );
+            console.log("저장 성공:", response.data);
+        } catch (error) {
+            console.error("저장 실패:", error);
+        }
         setIsOpen(false);
         alert("저장되었습니다");
     };
@@ -60,6 +84,7 @@ const CreateWorkout = ({ selectedDate, setIsOpen, userBMR }) => {
                 <EditWorkout
                     setWorkout={setWorkout}
                     workout={workout}
+                    setWorkoutImageUris={setWorkoutImageUris}
                     selectedDate={selectedDate}
                 />
                 <div className="w-[2px] h-[450px] bg-gray-300"></div>

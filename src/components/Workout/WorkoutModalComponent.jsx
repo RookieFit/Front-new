@@ -19,16 +19,16 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
     const [workout, setWorkout] = useState({
         workoutTitle: title || '',
         workoutComment: comment || '',
-        workoutImageUris: imageList || [],
         workoutCreatedDate: selectedDate,
         dailyCaloriesBurned: 0
     });
+    const [workoutImageUris, setWorkoutImageUris] = useState(imageList);
 
-    /*useEffect(() => {
+    useEffect(() => {
         const fetchWorkoutDetailList = async () => {
             try {
                 const response = await ApiClient.get(
-                    `/user/userworkoutdetaildata?workoutDetailCreatedDate=${selectedDate}`,
+                    `/user/workout/getworkoutdetail?createdDate=${selectedDate}`,
                 );
                 if (Array.isArray(response.data)) {
                     setWorkoutDetailList(response.data);
@@ -44,7 +44,7 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
         };
 
         fetchWorkoutDetailList();
-    }, [selectedDate]);*/
+    }, [selectedDate]);
 
     const [dietList, setDietList] = useState([
         {
@@ -71,14 +71,18 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
 
     // 오른쪽 버튼 클릭 시 처리
     const moveRight = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % imageList.length);
+        if (imageList.length > 0) {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % imageList.length);
+        }
     };
 
     // 왼쪽 버튼 클릭 시 처리
     const moveLeft = () => {
-        setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? imageList.length - 1 : prevIndex - 1
-        );
+        if (imageList.length > 0) {
+            setCurrentIndex((prevIndex) =>
+                prevIndex === 0 ? imageList.length - 1 : prevIndex - 1
+            );
+        }
     };
 
     useEffect(() => {
@@ -132,16 +136,31 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
                 <hr className="mb-5 border-gray-300" />
 
                 <div className="flex flex-row gap-5 h-[450px] mb-20">
-                    {isEdit ? (<EditWorkout
-                        setWorkout={setWorkout}
-                        workout={workout}
-                        selectedDate={selectedDate}
-                    />) :
+                    {isEdit ? (
+                        <EditWorkout
+                            setWorkout={setWorkout}
+                            workout={workout}
+                            selectedDate={selectedDate}
+                            setWorkoutImageUris={setWorkoutImageUris}
+                        />) :
                         (<div className="flex flex-col items-center w-1/2">
                             <div className="flex items-center gap-3">
-                                <button className="bg-red-300 text-white rounded-full w-8 h-8 flex items-center justify-center" onClick={moveLeft}>&lt;</button>
-                                <img src={workout.workoutImageUris[currentIndex]} className="w-[250px] h-[250px] my-5 object-cover rounded-lg" />
-                                <button className="bg-red-300 text-white rounded-full w-8 h-8 flex items-center justify-center" onClick={moveRight}>&gt;</button>
+                                <button
+                                    className="bg-red-300 text-white rounded-full w-8 h-8 flex items-center justify-center"
+                                    onClick={moveLeft}
+                                >
+                                    &lt;
+                                </button>
+                                <img
+                                    src={workout.workoutImageUris?.[currentIndex]}
+                                    className="w-[250px] h-[250px] my-5 object-cover rounded-lg"
+                                />
+                                <button
+                                    className="bg-red-300 text-white rounded-full w-8 h-8 flex items-center justify-center"
+                                    onClick={moveRight}
+                                >
+                                    &gt;
+                                </button>
                             </div>
                             {workout.workoutComment ? <p className="mt-3">{workout.workoutComment}</p> :
                                 <textarea
@@ -158,30 +177,33 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
 
                     <div className="w-[2px] h-[450px] bg-gray-300"></div>
 
-                    <div className="flex flex-col justify-center h-full w-1/2">
-                        {isEdit ? (<EditWorkoutList
-                            setWorkoutDetailList={setWorkoutDetailList}
-                            workoutDetailList={workoutDetailList}
-                            selectedDate={selectedDate}
-                        />) :
-                            (<div>
+                    <div className="flex flex-col justify-center h-full">
+                        {isEdit ? (
+                            <EditWorkoutList
+                                setWorkoutDetailList={setWorkoutDetailList}
+                                workoutDetailList={workoutDetailList}
+                                selectedDate={selectedDate}
+                            />) :
+                            (<div className='w-[400px]'>
                                 {workoutDetailList.length > 0 ? <div className="mb-3 border-2 border-solid border-gray-300 p-5">
                                     <p className="text-lg h-1/2 font-semibold text-center overflow-y-auto mb-5">운동일지</p>
                                     {workoutDetailList.map((workout, index) => (
-                                        <div key={index} className="flex flex-row justify-center items-center gap-10 mb-2">
-                                            <p className="font-semibold w-1/5">{workout.workoutName}</p>
+                                        <div key={index} className="flex flex-row justify-center items-center gap-5 mb-2">
+                                            <p className="font-semibold w-1/3">{workout.workoutName}</p>
                                             <p>{`${workout.sets}`}세트</p>
                                             <p>{`${workout.reps}`}회</p>
-                                            <p>{`${workout.restTime}`}</p>
+                                            <p>{`${workout.restTime}`}초</p>
                                         </div>
                                     ))}
-                                </div> : <div className="flex flex-col justify-center items-center mb-3 border-2 border-solid border-gray-300 p-5">
-                                    <p className="text-lg h-1/2 font-semibold text-center overflow-y-auto mb-5">새로운 기록을 남겨 보세요.</p>
-                                    <button
-                                        className='bg-gray-300 w-1/2'
-                                        onClick={() => setIsEdit(true)}
-                                    >작성하기</button>
-                                </div>}
+                                </div>
+                                    :
+                                    <div className="flex flex-col justify-center items-center mb-3 border-2 border-solid border-gray-300 p-5">
+                                        <p className="text-lg h-1/2 font-semibold text-center overflow-y-auto mb-5">새로운 기록을 남겨 보세요.</p>
+                                        <button
+                                            className='bg-gray-300 w-1/2'
+                                            onClick={() => setIsEdit(true)}
+                                        >작성하기</button>
+                                    </div>}
 
                                 {title && comment && workoutDetailList.length > 0 ? (
                                     <WorkoutDietSection dietList={dietList} />

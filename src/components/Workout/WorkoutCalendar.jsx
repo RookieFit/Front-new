@@ -11,23 +11,20 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
     const [events, setEvents] = useState([]);
     const [workoutList, setWorkoutList] = useState([
         {
-            workoutTitle: '제목입니다',
-            workoutComment: '내용입니다',
-            workoutImageUris: [
-
-            ],
-            workoutCreatedDate: '2025-02-21'
+            workoutTitle: '',
+            workoutComment: '',
+            workoutImageUris: [],
+            workoutCreatedDate: ''
         }
     ]);
 
-    /*useEffect(() => {
+    useEffect(() => {
         const fetchWorkoutList = async () => {
             try {
                 const response = await ApiClient.get(
-                    `/user/userworkoutlistdata`,
+                    `/user/workout/getworkout`,
                 );
-                console.log("백엔드 응답 데이터:", response.data);
-                setWorkoutList(response.data); // workoutList 업데이트
+                setWorkoutList(response.data);
             } catch (error) {
                 if (error.response) {
                     console.log("서버 응답 오류:", error.response.data);
@@ -41,7 +38,7 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
         };
 
         fetchWorkoutList();
-    }, []); // 컴포넌트 마운트 시 한 번 실행*/
+    }, []); // 컴포넌트 마운트 시 한 번 실행
 
     //todo: 공휴일 api 끌고와서 연결하기
     useEffect(() => {

@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import './WorkoutCalendar.css';
 import ApiClient from '../../services/ApiClient';
 
-const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, setImageList }) => {
+const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, setImageList, pageKey }) => {
 
     const [events, setEvents] = useState([]);
     const [workoutList, setWorkoutList] = useState([
@@ -38,7 +38,7 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
         };
 
         fetchWorkoutList();
-    }, []); // 컴포넌트 마운트 시 한 번 실행
+    }, [pageKey]); // 컴포넌트 마운트 시 한 번 실행
 
     //todo: 공휴일 api 끌고와서 연결하기
     useEffect(() => {
@@ -116,6 +116,7 @@ const WorkoutCalendar = ({ setIsOpen, setSelectedDate, setTitle, setComment, set
 };
 
 WorkoutCalendar.propTypes = {
+    pageKey: PropTypes.number.isRequired,
     setIsOpen: PropTypes.func.isRequired,
     setSelectedDate: PropTypes.func.isRequired,
     setTitle: PropTypes.func.isRequired,

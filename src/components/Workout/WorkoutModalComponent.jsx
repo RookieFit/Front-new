@@ -8,7 +8,7 @@ import EditWorkout from './EditWorkout';
 import CreateWorkout from './CreateWorkout';
 import { calculateCaloriesBurned } from '../Common/CalculateCaloriesBurned';
 
-const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageList }) => {
+const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageList, setPageKey }) => {
 
     //todo: userinfo의 기초대사량 백에서 가져오기
     const userBMR = 1500;
@@ -106,6 +106,7 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
                 //title과 운동기록이 없을 시 새로입력
                 <div>
                     <CreateWorkout
+                        setPageKey={setPageKey}
                         selectedDate={selectedDate}
                         setIsOpen={setIsOpen}
                         userBMR={userBMR}
@@ -152,7 +153,7 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
                                     &lt;
                                 </button>
                                 <img
-                                    src={workout.workoutImageUris?.[currentIndex]}
+                                    src={workoutImageUris?.[currentIndex]}
                                     className="w-[250px] h-[250px] my-5 object-cover rounded-lg"
                                 />
                                 <button
@@ -255,6 +256,7 @@ WorkoutModalComponent.propTypes = {
     title: PropTypes.string.isRequired,
     comment: PropTypes.string.isRequired,
     imageList: PropTypes.array.isRequired,
+    setPageKey: PropTypes.func.isRequired
 };
 
 export default WorkoutModalComponent;

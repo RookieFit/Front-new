@@ -4,7 +4,7 @@ import EditWorkout from './EditWorkout';
 import EditWorkoutList from './EditWorkoutDetailList';
 import { calculateCaloriesBurned } from '../Common/CalculateCaloriesBurned';
 import ApiClient from '../../services/ApiClient';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const CreateWorkout = ({ selectedDate, setIsOpen, userBMR, setPageKey }) => {
     const navigator = useNavigate();
@@ -29,7 +29,6 @@ const CreateWorkout = ({ selectedDate, setIsOpen, userBMR, setPageKey }) => {
         }));
     }, [workoutDetailList, userBMR]);
 
-    //todo: workdoutlist와 detail create에 저장
     const handleSaveWorkoutData = async () => {
         if (!workout.workoutTitle.trim()) {
             alert("제목을 입력해주세요");
@@ -80,9 +79,11 @@ const CreateWorkout = ({ selectedDate, setIsOpen, userBMR, setPageKey }) => {
 
     return (
         <div>
-            {isSaving ? (<div>
-                Saving...
-            </div>)
+            {isSaving ? (
+                <div className="flex justify-center pb-10 text-3xl text-center w-[200px] text-gray-500 font-bold animate-pulse">
+                    Saving...
+                </div>
+            )
                 :
                 (<div className="w-[950px] h-[700px]">
                     <header className="flex flex-col mb-5 ml-5">

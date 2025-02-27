@@ -1,9 +1,9 @@
-import ApiClient from "./ApiClient";
+import axios from "axios";
 import { clearAccessToken, setAccessToken } from "./Store";
 
 export const refreshAccessToken = async () => {
     try {
-        const response = await ApiClient.post(
+        const response = await axios.post(
             '/auth/refresh',
             {},
             { withCredentials: true }

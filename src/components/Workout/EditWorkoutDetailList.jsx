@@ -9,7 +9,7 @@ const EditWorkoutList = ({ setWorkoutDetailList, workoutDetailList, selectedDate
         reps: '',
         sets: '',
         restTime: '',
-        workoutCreatedDate: selectedDate  // Make sure this is always included
+        workoutCreatedDate: selectedDate
     });
 
     // 입력값 변경 핸들러
@@ -24,9 +24,8 @@ const EditWorkoutList = ({ setWorkoutDetailList, workoutDetailList, selectedDate
     const addWorkout = () => {
         // 빈 값이 아닌 경우에만 추가
         if (inputForm.workoutName.trim() && isValidNumber(inputForm.reps) && isValidNumber(inputForm.sets) && isValidNumber(inputForm.restTime)) {
-            // Add selectedDate explicitly for each new workout
             setWorkoutDetailList((prev) => [...prev, { ...inputForm, workoutCreatedDate: selectedDate }]);
-            setInputForm({ workoutName: '', reps: '', sets: '', restTime: '', workoutCreatedDate: selectedDate }); // Ensure selectedDate is reset
+            setInputForm({ workoutName: '', reps: '', sets: '', restTime: '', workoutCreatedDate: selectedDate });
         } else {
             alert('운동명과 횟수, 세트수, 휴식시간을 모두 올바르게 입력해주세요.');
         }
@@ -40,7 +39,7 @@ const EditWorkoutList = ({ setWorkoutDetailList, workoutDetailList, selectedDate
     return (
         <div className="h-full my-2">
             <header className="flex flex-col gap-2 items-center">
-                <form className="flex flex-row gap-7 justify-center rounded-xs">
+                <form className="flex flex-row gap-10 justify-center rounded-xs">
                     {[
                         { key: 'workoutName', label: '운동명' },
                         { key: 'reps', label: '횟수', type: 'number' },
@@ -50,8 +49,8 @@ const EditWorkoutList = ({ setWorkoutDetailList, workoutDetailList, selectedDate
                         <div key={key} className="flex flex-col items-center gap-1 my-2">
                             <label className="bg-gray-400 w-[95px] h-[35px] text-center rounded-lg">{label}</label>
                             <input
-                                type={type || 'text'}  // 기본값은 'text'로 설정
-                                className="w-[90px] h-[35px] text-center rounded-lg bg-gray-200"
+                                type={type || 'text'}
+                                className="w-[100px] h-[35px] text-center rounded-lg bg-gray-200"
                                 value={inputForm[key]}
                                 onChange={(e) => handleInputChange(key, e.target.value)}
                             />
@@ -71,7 +70,7 @@ const EditWorkoutList = ({ setWorkoutDetailList, workoutDetailList, selectedDate
                 <div className="mt-5 border-t-2 border-gray-300 pt-3">
                     {workoutDetailList.map((workout, index) => (
                         <div key={index} className="flex flex-row justify-around items-center p-2 border-b">
-                            <p className="w-1/4 text-center">{workout.workoutName || '-'}</p>
+                            <p className="w-1/2 text-center">{workout.workoutName || '-'}</p>
                             <p className="w-1/4 text-center">{workout.reps || '-'}회</p>
                             <p className="w-1/4 text-center">{workout.sets || '-'}세트</p>
                             <p className="w-1/4 text-center">{workout.restTime || '-'}초</p>

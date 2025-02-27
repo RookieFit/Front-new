@@ -9,7 +9,7 @@ export const refreshAccessToken = async () => {
             { withCredentials: true }
         );
         if (response.status === 200) {
-            const { accessToken } = response.data;
+            const accessToken = response.data;
             setAccessToken(accessToken);
             return accessToken;
         }

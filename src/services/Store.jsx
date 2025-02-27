@@ -1,11 +1,13 @@
 let accessToken;
 
 export const setAccessToken = (token) => {
-    accessToken = token;
+    sessionStorage.setItem('accessToken', token);
 };
 
-export const getAccessToken = () => accessToken;
+export const getAccessToken = () => {
+    return sessionStorage.getItem('accessToken');
+};
 
 export const clearAccessToken = () => {
-    accessToken = "";
+    sessionStorage.removeItem('accessToken');
 };

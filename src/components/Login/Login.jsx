@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ApiClient from "../../services/ApiClient";
 import { useNavigate } from "react-router-dom";
-import { getAccessToken } from "../../services/Store";
+import { setAccessToken } from "../../services/Store";
 
 const Login = () => {
     const [id, setId] = useState("");
@@ -18,11 +18,11 @@ const Login = () => {
         try {
             const response = await ApiClient.post(
                 '/auth/sign-in',
-                requestBody
+                requestBody,
+                { withCredentials: true }
             );
-            const { accessToken, refreshToken } = response.data;
-            getAccessToken(accessToken);
-            localStorage.setItem("refreshToken", refreshToken);
+            const accessToken = response.data;
+            setAccessToken(accessToken);
 
             navigate('/');
         } catch (error) {

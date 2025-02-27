@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ApiClient from "../../services/ApiClient";
 import { useNavigate } from "react-router-dom";
+import { setAccessToken } from "../../services/Store";
 
 const Login = () => {
     const [id, setId] = useState("");
@@ -12,16 +13,16 @@ const Login = () => {
         event.preventDefault();
         const requestBody = {
             userId: id,
-            user_password: password
+            userPassword: password
         };
         try {
             const response = await ApiClient.post(
                 '/auth/sign-in',
-                requestBody
+                requestBody,
+                { withCredentials: true }
             );
-            const { token, expirationTime } = response.data;
-            localStorage.setItem("token", token);
-            localStorage.setItem("expirationTime", expirationTime);
+            const accessToken = response.data;
+            setAccessToken(accessToken);
 
             navigate('/');
         } catch (error) {

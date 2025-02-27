@@ -54,7 +54,7 @@ const CreateWorkout = ({ selectedDate, setIsOpen, userBMR, setPageKey }) => {
             });
 
             const response = await ApiClient.post(
-                "user/workout/create",
+                "/user/workout/create",
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );

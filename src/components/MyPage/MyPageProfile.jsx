@@ -7,21 +7,20 @@ import PropTypes from "prop-types";
 const MyPageProfile = ({ setCurrentName }) => {
     const [userProfile, setUserProfile] = useState({
         userProfileImageUri: '',
-        gymName: '',
-        userMessage: '',
-        userName: '',
-        userAddress: '',
-        userNickname: '',
+        userProfileGymName: '',
+        userProfileMessage: '',
+        userProfileName: '',
+        userProfileAddress: '',
+        userProfileNickname: '',
     });
 
     useEffect(() => {
         const fetchProfile = async () => {
             try {
                 const response = await ApiClient.get(
-                    `/user/userprofile`,
+                    `/user/userdata/getprofile`,
                 );
                 setUserProfile(response.data);
-                setCurrentName(response.data.userName);
             } catch (error) {
                 if (error.response) {
                     console.log("서버 응답 오류:", error.response.data);

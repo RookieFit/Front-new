@@ -4,7 +4,7 @@ import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import ApiClient from '../../services/ApiClient';
 import PropTypes from "prop-types";
 
-const MyPageProfile = ({ setCurrentName }) => {
+const MyPageProfile = ({ setCurrentName, setIsOpen, setUpdateProfile, pageKey }) => {
     const [userProfile, setUserProfile] = useState({
         userProfileImageUri: '',
         userProfileGymName: '',
@@ -21,6 +21,8 @@ const MyPageProfile = ({ setCurrentName }) => {
                     `/user/userdata/getprofile`,
                 );
                 setUserProfile(response.data);
+                setUpdateProfile(response.data);
+                setCurrentName(response.data.userProfileName || '이름없음');
             } catch (error) {
                 if (error.response) {
                     console.log("서버 응답 오류:", error.response.data);
@@ -34,7 +36,7 @@ const MyPageProfile = ({ setCurrentName }) => {
         };
 
         fetchProfile();
-    }, [setCurrentName]); // 컴포넌트 마운트 시 한 번 실행
+    }, [setCurrentName, setUpdateProfile, pageKey]); // 컴포넌트 마운트 시 한 번 실행
 
     return (
         <div className='flex flex-raw justify-center items-center h-full w-full gap-5'>
@@ -46,14 +48,17 @@ const MyPageProfile = ({ setCurrentName }) => {
                 />
             </div>
             <div className='flex flex-col gap-1 text-xl font-medium'>
-                <span className='m-2 text-2xl'>{userProfile.userNickname}</span>
+                <div className='flex flex-raw'>
+                    <span className='m-2 text-xl'>{userProfile.userProfileNickname}</span>
+                    <button className='text-sm' onClick={() => setIsOpen(true)}>수정하기</button>
+                </div>
                 <div className='flex flex-raw items-center gap-2'>
                     <IoIosPin />
-                    <span>{userProfile.userAddress}</span>
+                    <span>{userProfile.userProfileAddress}</span>
                 </div>
                 <div className='flex flex-row items-center gap-2'>
                     <HiOutlineBuildingOffice2 />
-                    <span>{userProfile.gymName}</span>
+                    <span>{userProfile.userProfileGymName}</span>
                 </div>
             </div>
         </div>
@@ -62,6 +67,9 @@ const MyPageProfile = ({ setCurrentName }) => {
 
 MyPageProfile.propTypes = {
     setCurrentName: PropTypes.func.isRequired,
+    setIsOpen: PropTypes.func.isRequired,
+    setUpdateProfile: PropTypes.func.isRequired,
+    pageKey: PropTypes.number.isRequired,
 };
 
 export default MyPageProfile;

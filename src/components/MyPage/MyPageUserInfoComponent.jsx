@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ApiClient from "../../services/ApiClient";
 import PropTypes from "prop-types";
 
-const MyPageUserInfoComponent = ({ currentName }) => {
+const MyPageUserInfoComponent = ({ currentName, pageKey, setPageKey }) => {
     const [userBodyInfo, setUserBodyInfo] = useState({
         userInfoAge: 0,
         userInfoWeight: 0.0,
@@ -16,11 +16,13 @@ const MyPageUserInfoComponent = ({ currentName }) => {
 
     useEffect(() => {
         const fetchUserInfo = async () => {
+            setLoading(true);
             try {
                 const response = await ApiClient.get(
                     `/user/userdata/getuserinfo`,
                 );
                 setUserBodyInfo(response.data);
+                setLoading(false);
             } catch (error) {
                 if (error.response) {
                     console.log("서버 응답 오류:", error.response.data);
@@ -30,6 +32,7 @@ const MyPageUserInfoComponent = ({ currentName }) => {
                 } else {
                     console.error("요청 설정 오류:", error.message);
                 }
+                setLoading(false);
             }
         };
 
@@ -38,9 +41,10 @@ const MyPageUserInfoComponent = ({ currentName }) => {
 
     // 입력값 변경 핸들러 (불필요한 렌더링 방지)
     const handleInputChange = (key, value) => {
+        const numericValue = isNaN(Number(value)) ? value : Number(value);
         setUserBodyInfo((prev) => {
-            if (prev[key] === value) return prev;
-            return { ...prev, [key]: value };
+            if (prev[key] === numericValue) return prev;
+            return { ...prev, [key]: numericValue };
         });
     };
 
@@ -59,20 +63,11 @@ const MyPageUserInfoComponent = ({ currentName }) => {
             userInfoInBodyDate: userBodyInfo.userInfoInBodyDate || new Date().toISOString().split("T")[0]
         };
 
-        // 변경된 데이터 필터링
-        const changedData = Object.fromEntries(
-            Object.entries(updatedUserBodyInfo).filter(([key, value]) => value !== userBodyInfo[key])
-        );
-
-        if (Object.keys(changedData).length === 0) {
-            alert("변경된 데이터가 없습니다.");
-            return;
-        }
-
         try {
-            const response = await ApiClient.post("/user/userdata/createuserinfo", changedData);
+            const response = await ApiClient.post("/user/userdata/createuserinfo", updatedUserBodyInfo);
             console.log("데이터 저장 결과:", response.data);
             alert("체성분 정보가 성공적으로 저장되었습니다.");
+            setPageKey(prevKey => prevKey + 1);
         } catch (error) {
             console.error("체성분 정보 저장 오류:", error);
             alert("정보 저장에 실패했습니다.");
@@ -138,7 +133,9 @@ const MyPageUserInfoComponent = ({ currentName }) => {
 };
 
 MyPageUserInfoComponent.propTypes = {
-    currentName: PropTypes.string.isRequired
+    currentName: PropTypes.string.isRequired,
+    pageKey: PropTypes.number.isRequired,
+    setPageKey: PropTypes.func.isRequired,
 };
 
 export default MyPageUserInfoComponent;

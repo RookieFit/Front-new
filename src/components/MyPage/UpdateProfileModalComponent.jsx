@@ -1,11 +1,8 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from "prop-types";
 import ApiClient from "../../services/ApiClient";
-import { useNavigate } from 'react-router-dom';
 
 const UpdateProfileModalComponent = ({ updateProfile, setUpdateProfile, setIsOpen, setPageKey }) => {
-
-    const navigator = useNavigate();
 
     const [selectImageFile, setSelectImageFile] = useState(null);
     const fileInputRef = useRef(null);
@@ -41,7 +38,7 @@ const UpdateProfileModalComponent = ({ updateProfile, setUpdateProfile, setIsOpe
                 userProfileImageUri: undefined,
             })], { type: "application/json" }));
 
-            const response = await ApiClient.post("/user/userdata/createprofile", formData,
+            await ApiClient.post("/user/userdata/createprofile", formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
 

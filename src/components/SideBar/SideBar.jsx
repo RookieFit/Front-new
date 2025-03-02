@@ -6,6 +6,10 @@ import { menuItems } from './menuItems';
 const SideBar = ({ isCollapsed, toggleSidebar }) => {
     const [openMenu, setOpenMenu] = useState(null);
 
+    // 로그아웃 항목을 분리
+    const normalMenuItems = menuItems.filter(item => item.name !== "로그아웃");
+    const logoutItem = menuItems.find(item => item.name === "로그아웃");
+
     const toggleMenu = (index) => {
         if (openMenu === index) {
             setOpenMenu(null);
@@ -15,12 +19,10 @@ const SideBar = ({ isCollapsed, toggleSidebar }) => {
     };
 
     return (
-        <aside
-            className={`bg-rookieRed h-full transition-[width] duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}
-        >
+        <aside className={`bg-rookieRed h-full flex flex-col justify-between transition-[width] duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}>
             <nav>
                 <ul className="space-y-2">
-                    {menuItems.map((item, index) => (
+                    {normalMenuItems.map((item, index) => (
                         <li key={index}>
                             <button
                                 onClick={() => toggleMenu(index)}
@@ -29,20 +31,17 @@ const SideBar = ({ isCollapsed, toggleSidebar }) => {
                                 aria-controls={`menu-${index}`}
                             >
                                 <div className="flex items-center">
-                                    <span className={`ml-4 transition-opacity ${isCollapsed ? 'opacity-0 ' : 'opacity-100 delay-100'}`}>
+                                    <span className={`ml-4 transition-opacity ${isCollapsed ? 'opacity-0' : 'opacity-100 delay-100'}`}>
                                         {item.name}
                                     </span>
-
-
                                 </div>
                             </button>
-
                             {/* 하위 메뉴 */}
                             {item.subItems && item.subItems.length > 0 && (
                                 <ul
                                     id={`menu-${index}`}
                                     className={`pl-4 mt-2 ml-4 space-y-1 overflow-hidden 
-                                        ${openMenu === index && !isCollapsed
+                    ${openMenu === index && !isCollapsed
                                             ? 'max-h-[500px] opacity-100 transition-[max-height, opacity] duration-200 ease-in-out'
                                             : 'max-h-0 opacity-0 transition-[max-height, opacity] duration-200 ease-in-out'
                                         }`}
@@ -63,11 +62,22 @@ const SideBar = ({ isCollapsed, toggleSidebar }) => {
                     ))}
                 </ul>
             </nav>
+
+            {/* 하단에 로그아웃 버튼 */}
+            {logoutItem && (
+                <div className="mb-4">
+                    <Link
+                        to={logoutItem.subItems?.[0]?.path || '/logout'} // 필요에 따라 경로 수정
+                        className="block text-white p-4 hover:bg-rookieHover rounded mx-4"
+                    >
+                        {logoutItem.name}
+                    </Link>
+                </div>
+            )}
         </aside>
     );
 };
 
-// PropTypes 정의
 SideBar.propTypes = {
     isCollapsed: PropTypes.bool.isRequired,
     toggleSidebar: PropTypes.func.isRequired,

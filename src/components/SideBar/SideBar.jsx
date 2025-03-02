@@ -70,7 +70,9 @@ const SideBar = ({ isCollapsed, toggleSidebar }) => {
                         to={logoutItem.subItems?.[0]?.path || '/logout'} // 필요에 따라 경로 수정
                         className="block text-white p-4 hover:bg-rookieHover rounded mx-4"
                     >
-                        {logoutItem.name}
+                        <span className={`transition-opacity ${isCollapsed ? 'opacity-0' : 'opacity-100 delay-100'}`}>
+                            {logoutItem.name}
+                        </span>
                     </Link>
                 </div>
             )}

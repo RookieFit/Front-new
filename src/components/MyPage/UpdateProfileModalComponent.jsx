@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from "prop-types";
 import ApiClient from "../../services/ApiClient";
 
 const UpdateProfileModalComponent = ({ updateProfile, setUpdateProfile, setIsOpen, setPageKey }) => {
 
     const [selectImageFile, setSelectImageFile] = useState(null);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(updateProfile.userProfileImageUri);
+    const [isLoading, setIsLoading] = useState(false);
     const fileInputRef = useRef(null);
 
     const handleFileChange = (event) => {
@@ -26,6 +28,7 @@ const UpdateProfileModalComponent = ({ updateProfile, setUpdateProfile, setIsOpe
     };
 
     const handleSubmit = async () => {
+        setIsLoading(true);
         try {
             const formData = new FormData();
 
@@ -38,18 +41,32 @@ const UpdateProfileModalComponent = ({ updateProfile, setUpdateProfile, setIsOpe
                 userProfileImageUri: undefined,
             })], { type: "application/json" }));
 
-            await ApiClient.post("/user/userdata/createprofile", formData,
+            const response = await ApiClient.post("/user/userdata/createprofile", formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
 
-            alert("프로필 업데이트 성공");
+            alert(response.data.message);
             setIsOpen(false);
             setPageKey(prevKey => prevKey + 1);
         } catch (error) {
             console.error("프로필 업데이트 실패:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
-    const imagePreviewUrl = selectImageFile ? URL.createObjectURL(selectImageFile) : updateProfile.userProfileImageUri;
+
+    useEffect(() => {
+        if (selectImageFile) {
+            const objectUrl = URL.createObjectURL(selectImageFile);
+            setImagePreviewUrl(objectUrl);
+            return () => {
+                URL.revokeObjectURL(objectUrl);
+            };
+        } else {
+            setImagePreviewUrl(updateProfile.userProfileImageUri);
+        }
+    }, [selectImageFile, updateProfile.userProfileImageUri]);
+
     return (
         <div className='flex flex-col w-[300px] items-center'>
             <input
@@ -82,7 +99,13 @@ const UpdateProfileModalComponent = ({ updateProfile, setUpdateProfile, setIsOpe
                     />
                 </div>
             ))}
-            <button className="bg-blue-500 text-white px-4 py-2 rounded mt-3" onClick={handleSubmit}>저장하기</button>
+            <button
+                className="bg-blue-500 text-white px-4 py-2 rounded mt-3"
+                onClick={handleSubmit}
+                disabled={isLoading}
+            >
+                {isLoading ? "저장중..." : "저장하기"}
+            </button>
         </div>
     );
 };

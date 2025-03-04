@@ -65,8 +65,7 @@ const MyPageUserInfoComponent = ({ currentName, pageKey, setPageKey }) => {
 
         try {
             const response = await ApiClient.post("/user/userdata/createuserinfo", updatedUserBodyInfo);
-            console.log("데이터 저장 결과:", response.data);
-            alert("체성분 정보가 성공적으로 저장되었습니다.");
+            alert(response.data.message);
             setPageKey(prevKey => prevKey + 1);
         } catch (error) {
             console.error("체성분 정보 저장 오류:", error);

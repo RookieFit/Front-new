@@ -48,7 +48,6 @@ const MyPage = () => {
             <section className='flex flex-col w-2/5 border-b-2 h-[800px] mr-5'>
                 <MyPageUserTab
                     currentName={currentName}
-                    pageKey={pageKey}
                     setPageKey={setPageKey}
                 />
             </section>

@@ -2,9 +2,11 @@ import axios from "axios";
 import { clearAccessToken, setAccessToken } from "./Store";
 
 export const refreshAccessToken = async () => {
+    const testUrl = 'http://localhost:8080';
+    const requestUrl = 'http://pipakmjhomeserver.ddns.net';
     try {
         const response = await axios.post(
-            '/auth/refresh',
+            `${testUrl}/api/auth/refresh`,
             {},
             { withCredentials: true }
         );

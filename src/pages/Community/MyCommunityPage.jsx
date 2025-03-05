@@ -5,7 +5,7 @@ import MyCommunityHeader from '../../components/Community/MyCommunityHeader';
 const MyCommunityPage = () => {
     return (
         <div>
-            <header>
+            <header className='mt-10'>
                 <MyCommunityHeader />
             </header>
             <section>

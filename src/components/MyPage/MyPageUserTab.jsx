@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MyPageUserInfoComponent from "./MyPageUserInfoComponent";
 import PropTypes from "prop-types";
 
-const MyPageUserTab = ({ currentName }) => {
+const MyPageUserTab = ({ currentName, setPageKey }) => {
     const [activeTab, setActiveTab] = useState("info");
 
     return (
@@ -27,7 +27,7 @@ const MyPageUserTab = ({ currentName }) => {
             <div className="w-full bg-white shadow-md p-4 flex-1 flex flex-col">
                 {activeTab === "info" && (
                     <div className="flex-1 flex flex-col">
-                        <MyPageUserInfoComponent currentName={currentName} />
+                        <MyPageUserInfoComponent currentName={currentName} setPageKey={setPageKey} />
                     </div>
                 )}
                 {activeTab === "etc1" && (
@@ -50,6 +50,7 @@ const MyPageUserTab = ({ currentName }) => {
 
 MyPageUserTab.propTypes = {
     currentName: PropTypes.string.isRequired,
+    setPageKey: PropTypes.func.isRequired,
 };
 
 export default MyPageUserTab;

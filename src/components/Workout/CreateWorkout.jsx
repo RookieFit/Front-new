@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import EditWorkout from './EditWorkout';
-import EditWorkoutList from './EditWorkoutDetailList';
+import EditWorkoutDetailList from './EditWorkoutDetailList';
 import { calculateCaloriesBurned } from '../Common/CalculateCaloriesBurned';
 import ApiClient from '../../services/ApiClient';
 import { useNavigate } from 'react-router-dom';
@@ -107,7 +107,7 @@ const CreateWorkout = ({ selectedDate, setIsOpen, userBMR, setPageKey }) => {
                             selectedDate={selectedDate}
                         />
                         <div className="w-[2px] h-[450px] bg-gray-300"></div>
-                        <EditWorkoutList
+                        <EditWorkoutDetailList
                             setWorkoutDetailList={setWorkoutDetailList}
                             workoutDetailList={workoutDetailList}
                             selectedDate={selectedDate}

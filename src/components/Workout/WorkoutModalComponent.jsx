@@ -7,11 +7,13 @@ import EditWorkoutDetailList from './EditWorkoutDetailList';
 import EditWorkout from './EditWorkout';
 import CreateWorkout from './CreateWorkout';
 import { calculateCaloriesBurned } from '../Common/CalculateCaloriesBurned';
+import { useNavigate } from 'react-router-dom';
 
 const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageList, setPageKey }) => {
 
     //todo: userinfo의 기초대사량 백에서 가져오기
     const userBMR = 1500;
+    const navigator = useNavigate();
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [workoutDetailList, setWorkoutDetailList] = useState([]);
@@ -23,7 +25,7 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
         dailyCaloriesBurned: 0
     });
     const [workoutImageUris, setWorkoutImageUris] = useState(imageList);
-    const [isSaving, setIsSaving] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     useEffect(() => {
         const fetchWorkoutDetailList = async () => {
@@ -112,7 +114,7 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
         };
         const newFiles = workoutImageUris.filter(img => img instanceof File);
         try {
-            setIsSaving(true);
+            setIsUpdating(true);
             const formData = new FormData();
             formData.append(
                 "workout",
@@ -122,22 +124,7 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
                 formData.append("images", file); // 여러 이미지 첨부
             });
 
-            for (let [key, value] of formData.entries()) {
-                if (value instanceof Blob) {
-                    console.log(`FormData: ${key} -> Blob (type: ${value.type}, size: ${value.size})`);
-
-                    // workout이면 JSON 내용 출력
-                    if (key === "workout") {
-                        value.text().then(text => {
-                            console.log("📌 Workout 데이터 내용:", JSON.parse(text));
-                        });
-                    }
-                } else {
-                    console.log(`FormData: ${key} ->`, value);
-                }
-            }
-
-            const response = await ApiClient.post(
+            const response = await ApiClient.put(
                 "/user/workout/update",
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
@@ -150,14 +137,14 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
             });
             setWorkoutDetailList([]);
             setWorkoutImageUris([]);
-            alert("저장되었습니다");
+            alert(response.data.message);
             setIsOpen(false);
             setPageKey(prevKey => prevKey + 1);
             navigator('/workout', { replace: true });
         } catch (error) {
             console.error("저장 실패:", error);
         } finally {
-            setIsSaving(false);
+            setIsUpdating(false);
         }
     };
 
@@ -177,9 +164,9 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
             :
             (
 
-                isSaving ? (
+                isUpdating ? (
                     <div className="flex justify-center pb-10 text-3xl text-center w-[200px] text-gray-500 font-bold animate-pulse" >
-                        Saving...
+                        Updating...
                     </div >
                 ) :
                     (<div className="w-[950px] h-[700px]">

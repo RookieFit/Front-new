@@ -3,10 +3,10 @@ import { clearAccessToken, getAccessToken, setAccessToken } from "./Store";
 import { refreshAccessToken } from "./Auth";
 
 const testUrl = 'http://localhost:8080';
-const requestUrl = 'http://pipakmjhomeserver.ddns.net';
+const requestUrl = 'https://pipakmjhomeserver.ddns.net';
 
 const ApiClient = axios.create({
-    baseURL: `${testUrl}/api`,
+    baseURL: `${requestUrl}/api`,
     headers: {
         "Content-Type": "application/json"
     }

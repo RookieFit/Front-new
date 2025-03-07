@@ -3,10 +3,10 @@ import { clearAccessToken, setAccessToken } from "./Store";
 
 export const refreshAccessToken = async () => {
     const testUrl = 'http://localhost:8080';
-    const requestUrl = 'http://pipakmjhomeserver.ddns.net';
+    const requestUrl = 'https://pipakmjhomeserver.ddns.net';
     try {
         const response = await axios.post(
-            `${testUrl}/api/auth/refresh`,
+            `${requestUrl}/api/auth/refresh`,
             {},
             { withCredentials: true }
         );

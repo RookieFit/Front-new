@@ -6,7 +6,7 @@ export const refreshAccessToken = async () => {
     const requestUrl = 'https://pipakmjhomeserver.ddns.net';
     try {
         const response = await axios.post(
-            `${requestUrl}/api/auth/refresh`,
+            `${testUrl}/api/auth/refresh`,
             {},
             { withCredentials: true }
         );

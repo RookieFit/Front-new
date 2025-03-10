@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from '../Common/Modal';
 import DietModalComponent from './DietModalComponent';
 
-const AteFoodList = ({ handleSaveFood, ateFoodList }) => {
+const AteFoodList = ({ ateFoodList, handleSaveFood }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [expandedIndex, setExpandedIndex] = useState(null);
+    const [foods, setFoods] = useState(ateFoodList);
 
     const toggleDropdown = (index) => {
         setExpandedIndex(expandedIndex === index ? null : index);
     };
+
+    useEffect(() => {
+        setFoods(ateFoodList);
+    }, [ateFoodList]);
 
     return (
         <div className="w-full flex flex-col items-center min-h-[500px]">
@@ -18,10 +23,10 @@ const AteFoodList = ({ handleSaveFood, ateFoodList }) => {
 
             {/* 음식 리스트 */}
             <ul className="mt-5 space-y-2 max-h-[350px] overflow-auto w-[80%]">
-                {ateFoodList.length === 0 ? (
+                {foods.length === 0 ? (
                     <p className="text-center text-gray-500">추가된 식단이 없습니다.</p>
                 ) : (
-                    ateFoodList.map((food, index) => (
+                    foods.map((food, index) => (
                         <li
                             key={food.id}
                             className="p-3 bg-gray-100 rounded-md cursor-pointer"
@@ -51,7 +56,7 @@ const AteFoodList = ({ handleSaveFood, ateFoodList }) => {
                 <DietModalComponent
                     setIsModalOpen={setIsModalOpen}
                     handleSaveFood={handleSaveFood}
-                    initialAddedFoods={ateFoodList}
+                    initialAddedFoods={foods}
                 />
             </Modal>
         </div>

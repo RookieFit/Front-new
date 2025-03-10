@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import FoodSearchBar from './FoodSearchBar';
 import FoodSearchResult from './FoodSearchResult';
+import ApiClient from '../../services/ApiClient';
 
 const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods = [] }) => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [selectedFood, setSelectedFood] = useState(null);
 	const [addedFoods, setAddedFoods] = useState(initialAddedFoods);
+	const [userId, setUserId] = useState('mmglo');
 
 	useEffect(() => {
 		setAddedFoods(initialAddedFoods);
@@ -17,7 +19,6 @@ const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods 
 
 	const handleAddFood = (newFood) => {
 		setAddedFoods((prevFoods) => {
-			// 이미 추가된 음식인지 확인하고 추가(추후 수정 필요)
 			if (!prevFoods.find(food => food.id === newFood.id)) {
 				return [...prevFoods, newFood];
 			}
@@ -29,9 +30,38 @@ const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods 
 		setAddedFoods((prevFoods) => prevFoods.filter(food => food.id !== foodToRemove.id));
 	};
 
+	const saveDietToDatabase = async () => {
+		try {
+			const dietData = {
+				userId: userId,
+				dietDate: new Date().toISOString().split('T')[0],
+				dietDetails: addedFoods.map(food => ({
+					id: food.id,
+					foodName: food.foodName,
+					foodFirstCategory: food.foodFirstCategory,
+					chocdf: food.chocdf,
+					prot: food.prot,
+					fatce: food.fatce,
+					enerc: food.enerc,
+				})),
+			};
+
+			const response = await ApiClient.post('/diet/list/add', dietData);
+			if (response.status === 200) {
+				alert('식단이 저장되었습니다!');
+				handleSaveFood(addedFoods);
+				setIsModalOpen(false);
+			} else {
+				alert('식단 저장에 실패했습니다.');
+			}
+		} catch (error) {
+			console.error('API 호출 오류:', error);
+			alert('식단 저장 중 오류가 발생했습니다.');
+		}
+	};
+
 	const handleSave = () => {
-		handleSaveFood(addedFoods);
-		setIsModalOpen(false);
+		saveDietToDatabase();
 	};
 
 	return (
@@ -44,7 +74,6 @@ const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods 
 
 			{/* 좌우 레이아웃 */}
 			<div className="flex flex-grow mt-5">
-				{/* 왼쪽 */}
 				<div className="w-1/2 flex flex-col h-[51vh] mt-[-1%]">
 					<FoodSearchBar onSearch={setSearchTerm} searchTerm={searchTerm} />
 					<div className="flex-grow overflow-auto mt-4 border p-2 rounded-lg">
@@ -57,10 +86,8 @@ const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods 
 					</div>
 				</div>
 
-				{/* 중앙 구분선 */}
 				<div className="h-[70%] w-[1px] mt-5 bg-gray-200 mx-6"></div>
 
-				{/* 오른쪽 */}
 				<div className="w-1/2 h-[50vh] bg-gray-100 p-4 overflow-auto rounded-lg">
 					<h3 className="text-xl font-semibold mb-4">추가된 음식 리스트</h3>
 					<ul>
@@ -89,7 +116,6 @@ const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods 
 				</div>
 			</div>
 
-			{/* 하단 버튼 */}
 			<div className="absolute bottom-10 left-0 w-full flex justify-center">
 				<button className="bg-white rounded-lg text-gray-700 border-2 w-1/6 px-4 py-2 hover:opacity-50" onClick={() => setIsModalOpen(false)}>닫기</button>
 				<button className="bg-rookieRed rounded-lg text-white border-2 w-1/6 px-4 py-2 ml-4 hover:opacity-80" onClick={handleSave}>저장하기</button>

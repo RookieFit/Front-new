@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ApiClient from '../../services/ApiClient';
 import { useParams } from 'react-router-dom';
 
@@ -6,11 +6,14 @@ const CommunityDetail = () => {
     const { id } = useParams();
     const [post, setPost] = useState(
         {
-            title: 'ㄴㅇㄻㄴㅇㄹㄹㄴㅇㄹ',
-            author: '작성자',
-            boardType: '바프',
-            content: '<p>hi<p>'
+            communityTitle: '',
+            communityAuthor: '',
+            communityType: '',
+            communityContent: '',
+            communityCreatedAt: ''
+
         });
+    const [newAnswer, setNewAnswer] = useState('');
     const [answerList, setAnswerList] = useState([
         {
             answerId: 1,
@@ -38,7 +41,18 @@ const CommunityDetail = () => {
         },
     ]);
 
-    const [newAnswer, setNewAnswer] = useState('');
+    useEffect(() => {
+        const fetchBoardList = async () => {
+            try {
+                const response = await ApiClient.get(`/user/community/detail?communityId=${id}`);
+                setPost(response.data);
+            } catch (error) {
+                console.error("게시글 불러오기 실패:", error);
+            }
+        };
+
+        fetchBoardList();
+    }, [id]);
 
     //todo: 댓글추가 작성자부분 해당 userid나 이름이 들어감
     const handleAddAnswer = async () => {
@@ -79,16 +93,17 @@ const CommunityDetail = () => {
     return (
         <div className='flex flex-col m-10'>
             <header className='w-full'>
-                <h1 className='text-3xl font-bold'>{post.boardType}</h1>
+                <h1 className='text-3xl font-bold'>{post.communityType}</h1>
                 <hr className='border-2 border-rookieRed my-2' />
             </header>
             <div className='flex flex-col'>
                 <div className='border-2 p-2 mb-3'>
-                    <h1>제목: {post.title}</h1>
-                    <h2>작성자: {post.author}</h2>
+                    <h1>제목: {post.communityTitle}</h1>
+                    <h2>작성자: {post.communityAuthor}</h2>
+                    <h3>작성일자: {post.communityCreatedAt}</h3>
                 </div>
                 <div className='m-2'>
-                    <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                    <div dangerouslySetInnerHTML={{ __html: post.communityContent }} />
                 </div>
             </div>
             <hr className='border-2 border-rookieRed my-2' />

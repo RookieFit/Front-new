@@ -1,6 +1,6 @@
 import React from 'react';
 import CommunitySearchSection from './CommunitySearchSection';
-import CommunityBoard from './CommunityBoard';
+import BoardComponent from './BoardComponent';
 
 const CommunityList = () => {
     return (
@@ -9,7 +9,7 @@ const CommunityList = () => {
                 <CommunitySearchSection />
             </section>
             <section className='h-2/3'>
-                <CommunityBoard />
+                <BoardComponent />
             </section>
         </div>
     );

@@ -2,18 +2,16 @@ import React, { useEffect, useState } from 'react';
 import BoardComponent from './BoardComponent';
 import ApiClient from '../../services/ApiClient';
 
-const MyCommunityBoard = () => {
-
+const CommunityBoard = () => {
     const [boardList, setBoardList] = useState([]);
     const [selectedType, setSelectedType] = useState('전체');
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const itemsPerPage = 10;
-
     useEffect(() => {
         const fetchBoardList = async () => {
             try {
-                let url = `/user/community/mylist?page=${currentPage - 1}&size=${itemsPerPage}`;
+                let url = `/user/community/list?page=${currentPage - 1}&size=${itemsPerPage}`;
                 if (selectedType !== '전체') {
                     url += `&communityType=${selectedType}`;
                 }
@@ -29,7 +27,6 @@ const MyCommunityBoard = () => {
 
         fetchBoardList();
     }, [selectedType, currentPage]);
-
     return (
         <div>
             <BoardComponent
@@ -44,4 +41,4 @@ const MyCommunityBoard = () => {
     );
 };
 
-export default MyCommunityBoard;
+export default CommunityBoard;

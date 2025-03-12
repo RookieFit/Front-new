@@ -1,38 +1,18 @@
-import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../Common/Pagination';
 import writeImage from '../assets/images/community-write-image.png';
-import ApiClient from '../../services/ApiClient';
+import PropTypes from 'prop-types';
 
-const BoardComponent = () => {
+const BoardComponent = ({
+    boardList,
+    totalPages,
+    setSelectedType,
+    selectedType,
+    currentPage,
+    setCurrentPage
+}) => {
     const navigate = useNavigate();
-
-    const [boardList, setBoardList] = useState([]);
-    const [selectedType, setSelectedType] = useState('전체');
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const boardTypeList = ['전체', '바프', '일상', '등등', '기타'];
-    const itemsPerPage = 10;
-
-    useEffect(() => {
-        const fetchBoardList = async () => {
-            try {
-                let url = `/user/community/list?page=${currentPage - 1}&size=${itemsPerPage}`;
-                if (selectedType !== '전체') {
-                    url += `&communityType=${selectedType}`;
-                }
-
-                const response = await ApiClient.get(url);
-                setBoardList(response.data.content || []);
-                setTotalPages(response.data.totalPages || 1);
-            } catch (error) {
-                console.error("게시글 불러오기 실패:", error);
-                setBoardList([]);
-            }
-        };
-
-        fetchBoardList();
-    }, [selectedType, currentPage]);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -103,6 +83,14 @@ const BoardComponent = () => {
             </div>
         </div>
     );
+};
+BoardComponent.propTypes = {
+    boardList: PropTypes.array.isRequired,
+    totalPages: PropTypes.number.isRequired,
+    setSelectedType: PropTypes.func.isRequired,
+    selectedType: PropTypes.string.isRequired,
+    currentPage: PropTypes.number.isRequired,
+    setCurrentPage: PropTypes.func.isRequired,
 };
 
 export default BoardComponent;

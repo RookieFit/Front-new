@@ -9,7 +9,7 @@ const CommunityDetail = () => {
             title: 'ㄴㅇㄻㄴㅇㄹㄹㄴㅇㄹ',
             author: '작성자',
             boardType: '바프',
-            content: '<p>ㅁㄴㅇㄻㄴㅇㄹ</p><p>ㅁㄴㅇㄻㄴㅇㄹ</p>'
+            content: '<p>hi<p>'
         });
     const [answerList, setAnswerList] = useState([
         {

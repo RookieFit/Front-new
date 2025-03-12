@@ -27,7 +27,6 @@ const BoardComponent = ({ boardTypeList = [], boardList = [] }) => {
     }, [selectedType]);
 
     const handlePosts = () => {
-        alert('글쓰러가기');
         navigate('/editor');
     };
 

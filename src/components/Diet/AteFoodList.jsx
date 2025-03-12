@@ -1,15 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../Common/Modal';
 import DietModalComponent from './DietModalComponent';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
-const AteFoodList = ({ ateFoodList, handleSaveFood }) => {
+const AteFoodList = ({ handleSaveFood, ateFoodList }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [expandedIndex, setExpandedIndex] = useState(null);
-    const [foods, setFoods] = useState(ateFoodList);
+    const [foods, setFoods] = useState([]);
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
 
     const toggleDropdown = (index) => {
         setExpandedIndex(expandedIndex === index ? null : index);
     };
+
+    // 날짜 형식 변환 함수
+    const formatDate = (date) => {
+        return format(date, "yyyy-MM-dd", { locale: ko });
+    };
+
+    // API에서 식단 리스트 불러오기
+    useEffect(() => {
+        const fetchDietList = async () => {
+            try {
+                const formattedDate = formatDate(selectedDate);
+                const response = await fetch(`/api/diet?dietDate=${encodeURIComponent(formattedDate)}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                setFoods(data.dietDetails || []);
+            } catch (error) {
+                console.error("API 요청 실패:", error);
+            }
+        };
+
+        fetchDietList();
+    }, [selectedDate]);
 
     useEffect(() => {
         setFoods(ateFoodList);

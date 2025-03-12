@@ -5,7 +5,7 @@ import AteFoodList from "./AteFoodList";
 const Diet = () => {
     const [ateFoodList, setAteFoodList] = useState([]);
 
-    // 음식 리스트를 업데이트하는 함수
+    // 음식 리스트를 덮어쓰는 함수
     const handleSaveFood = (addedFoods) => {
         setAteFoodList(addedFoods);
     };

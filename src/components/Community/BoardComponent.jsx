@@ -47,14 +47,14 @@ const BoardComponent = ({
                         </div>
                     )
                     :
-                    (<div className='w-full h-[380px] mt-4'>
+                    (<div className='w-full h-[397px]'>
                         {boardList.map((board, index) => (
                             <div key={board.communityId}>
-                                <Link to={`/community/${board.communityId}`} className={`flex flex-row m-3 gap-10 text-sm ${index !== boardList.length - 1 ? 'border-b border-gray-300 pb-2' : ''}`}>
+                                <Link to={`/community/${board.communityId}`} className={`flex flex-row m-3 gap-10 text-xs ${index !== boardList.length - 1 ? 'border-b border-gray-300 pb-2' : ''}`}>
                                     <p className='ml-3 w-[20px]'>{board.communityId}</p>
                                     <p>[{board.communityType}]</p>
                                     <p className='w-1/2'>{board.communityTitle}</p>
-                                    <p>{board.communityAuthor}</p>
+                                    <p className='w-1/6'>{board.communityAuthor}</p>
                                     <p>{board.communityCreatedAt}</p>
                                 </Link>
                             </div>

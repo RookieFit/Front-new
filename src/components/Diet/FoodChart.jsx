@@ -28,6 +28,9 @@ const FoodChart = ({ ateFoodList }) => {
 				fat += food.fatce || 0;
 			});
 		}
+		carbs = parseFloat(carbs.toFixed(2));
+		protein = parseFloat(protein.toFixed(2));
+		fat = parseFloat(fat.toFixed(2));
 
 		return [carbs, protein, fat];
 	};

@@ -62,7 +62,6 @@ const BoardComponent = ({
                     </div>)}
             </div>
 
-
             <hr className='w-full border-2' />
 
             <div className='flex flex-row justify-between items-center w-full'>

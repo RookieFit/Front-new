@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ApiClient from '../../services/ApiClient';
 import { useParams } from 'react-router-dom';
 import Pagination from '../Common/Pagination';
@@ -18,7 +18,6 @@ const CommunityDetail = () => {
     const [answerList, setAnswerList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [pageKey, setPageKey] = useState(0);
     const itemsPerPage = 5;
 
     useEffect(() => {
@@ -34,19 +33,21 @@ const CommunityDetail = () => {
         fetchBoardList();
     }, [id]);
 
+    const fetchAnswerList = useCallback(async () => {
+        try {
+            const response = await ApiClient.get(`/user/community/${id}/answer/list?page=${currentPage - 1}&size=${itemsPerPage}`);
+            setAnswerList(response.data.content || []);
+            setTotalPages(response.data.totalPages || 1);
+        } catch (error) {
+            console.error("댓글 불러오기 실패:", error);
+            setAnswerList([]);
+        }
+    }, [id, currentPage]);
+
     useEffect(() => {
-        const fetchAnswerList = async () => {
-            try {
-                const response = await ApiClient.get(`/user/community/${id}/answer/list?page=${currentPage - 1}&size=${itemsPerPage}`);
-                setAnswerList(response.data.content || []);
-                setTotalPages(response.data.totalPages || 1);
-            } catch (error) {
-                console.error("댓글 불러오기 실패:", error);
-                setAnswerList([]);
-            }
-        };
         fetchAnswerList();
-    }, [id, currentPage, pageKey]);
+    }, [fetchAnswerList]);
+
 
     const handleAddAnswer = async () => {
         if (newAnswer.trim() === '') return;
@@ -54,8 +55,8 @@ const CommunityDetail = () => {
 
         try {
             await ApiClient.post(`/user/community/${id}/answer/create`, newComment);
-            setPageKey((prev) => prev + 1);
             setNewAnswer('');
+            fetchAnswerList();
         } catch (error) {
             console.log("댓글오류" + error);
         };

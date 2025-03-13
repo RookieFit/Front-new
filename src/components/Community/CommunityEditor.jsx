@@ -20,34 +20,37 @@ const CommunityEditor = () => {
             if (!content) return alert('내용을 입력하세요');
             setIsSaving(true);
             const formData = new FormData();
+            let imageUrls = [];
+
             if (images.length > 0) {
                 images.forEach(image => formData.append("contentImageFiles", image));
+                const response = await ApiClient.post("/user/community/uploadContentImages",
+                    formData,
+                    { headers: { "Content-Type": "multipart/form-data" } }
+                );
+
+                if (response.data) {
+                    imageUrls = response.data; // Store the response data (URLs)
+                }
             }
 
-            //게시글에 포함된 이미지파일을 백서버에 저장
-            const response = await ApiClient.post("/user/community/uploadContentImages",
-                formData,
-                { headers: { "Content-Type": "multipart/form-data" } }
-            );
             //이미지파일 저장후 url를 response로 받고 blob으로 시작하는 주소를 변경
-            if (response.data) {
-                let updatedContent = content;
-                response.data.forEach((url) => {
-                    updatedContent = updatedContent.replace(/blob:[^"]+/, url); //blob으로 시작하고 "전까지의 내용을 url로 변경
-                });
+            let updatedContent = content;
+            imageUrls.forEach((url) => {
+                updatedContent = updatedContent.replace(/blob:[^"]+/, url); // Replace 'blob' URLs with actual URLs
+            });
 
-                const requestData = {
-                    communityTitle: title,
-                    communityContent: updatedContent,
-                    communityType: communityType,
-                };
+            const requestData = {
+                communityTitle: title,
+                communityContent: updatedContent,
+                communityType: communityType,
+            };
 
-                //img 태그의 이미지 주소 변경후 백에 제목과 함께 콘텐츠 저장
-                const saveResponse = await ApiClient.post("/user/community/createCommunity", requestData);
+            //img 태그의 이미지 주소 변경후 백에 제목과 함께 콘텐츠 저장
+            const saveResponse = await ApiClient.post("/user/community/createCommunity", requestData);
 
-                alert(saveResponse.data.message);
-                navigate('/community'); // 저장 후 이동
-            }
+            alert(saveResponse.data.message);
+            navigate('/community'); // 저장 후 이동
         } catch (error) {
             console.error("게시글 저장 실패:", error);
         } finally {
@@ -55,7 +58,7 @@ const CommunityEditor = () => {
         }
     };
     return (
-        <div className="relative p-4">
+        <div className="relative p-4 h-full">
             <h1 className="text-xl font-bold mb-2">게시글 작성</h1>
             <input
                 type="text"

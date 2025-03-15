@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from "prop-types";
 import ApiClient from "../../services/ApiClient";
+import GooglePlacesAutocomplete from '../Common/GooglePlacesAutocomplete';
 
 const UpdateProfileModalComponent = ({ updateProfile, setUpdateProfile, setIsOpen, setPageKey }) => {
 
@@ -8,6 +9,7 @@ const UpdateProfileModalComponent = ({ updateProfile, setUpdateProfile, setIsOpe
     const [imagePreviewUrl, setImagePreviewUrl] = useState(updateProfile.userProfileImageUri);
     const [isLoading, setIsLoading] = useState(false);
     const fileInputRef = useRef(null);
+    const [selectedAddress, setSelectedAddress] = useState(updateProfile.userProfileAddress || "");
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -39,6 +41,7 @@ const UpdateProfileModalComponent = ({ updateProfile, setUpdateProfile, setIsOpe
             formData.append("profile", new Blob([JSON.stringify({
                 ...updateProfile,
                 userProfileImageUri: undefined,
+                userProfileAddress: selectedAddress || updateProfile.userProfileAddress,
             })], { type: "application/json" }));
 
             const response = await ApiClient.post("/user/userdata/createprofile", formData,
@@ -87,9 +90,8 @@ const UpdateProfileModalComponent = ({ updateProfile, setUpdateProfile, setIsOpe
                 { key: "userProfileNickname", label: "닉네임" },
                 { key: "userProfileGymName", label: "헬스장 이름" },
                 { key: "userProfileMessage", label: "상태메시지" },
-                { key: "userProfileAddress", label: "주소" }
             ].map(({ key, label }) => (
-                <div key={key} className="flex flex-col w-full m-3">
+                <div key={key} className="flex flex-col w-full m-1">
                     <label>{label}</label>
                     <input
                         type="text"
@@ -99,6 +101,7 @@ const UpdateProfileModalComponent = ({ updateProfile, setUpdateProfile, setIsOpe
                     />
                 </div>
             ))}
+            <GooglePlacesAutocomplete onSelectAddress={(address) => setSelectedAddress(address)} placeholder={selectedAddress} />
             <button
                 className="bg-blue-500 text-white px-4 py-2 rounded mt-3"
                 onClick={handleSubmit}

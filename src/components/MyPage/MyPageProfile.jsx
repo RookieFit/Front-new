@@ -47,14 +47,14 @@ const MyPageProfile = ({ setCurrentName, setIsOpen, setUpdateProfile, pageKey })
                     alt='Profile'
                 />
             </div>
-            <div className='flex flex-col gap-1 text-xl font-medium'>
+            <div className='flex flex-col gap-1 text-sm font-medium'>
                 <div className='flex flex-raw'>
                     <span className='m-2 text-xl'>{userProfile.userProfileNickname}</span>
                     <button className='text-sm' onClick={() => setIsOpen(true)}>수정하기</button>
                 </div>
                 <div className='flex flex-raw items-center gap-2'>
                     <IoIosPin />
-                    <span>{userProfile.userProfileAddress}</span>
+                    <span className='w-[220px]'>{userProfile.userProfileAddress}</span>
                 </div>
                 <div className='flex flex-row items-center gap-2'>
                     <HiOutlineBuildingOffice2 />

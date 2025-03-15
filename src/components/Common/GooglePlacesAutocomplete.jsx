@@ -18,7 +18,6 @@ const GooglePlacesAutocomplete = ({ onSelectAddress, placeholder }) => {
             if (value.length > 2) {
                 try {
                     const response = await ApiClient.get(`/places/autocomplete?query=${value}`);
-                    console.log(response.data);
                     setSuggestions(response.data);
                 } catch (error) {
                     console.log("자동완성 요청 실패", error);

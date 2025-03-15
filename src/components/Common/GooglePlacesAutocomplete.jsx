@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ApiClient from '../../services/ApiClient';
 import PropTypes from 'prop-types';
 
@@ -7,6 +7,14 @@ const GooglePlacesAutocomplete = ({ onSelectAddress, placeholder }) => {
     const [suggestions, setSuggestions] = useState([]);
 
     let debounceTimer = useRef(null);
+
+    useEffect(() => {
+        return () => {
+            if (debounceTimer.current) {
+                clearTimeout(debounceTimer.current);
+            }
+        };
+    }, []);
 
     const handleInputChange = async (e) => {
         const value = e.target.value;

@@ -1,163 +1,86 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import BoardComponent from './BoardComponent';
+import ApiClient from '../../services/ApiClient';
+import CommunitySearchSection from './CommunitySearchSection';
 
 const MyCommunityBoard = () => {
-    const boardList = useMemo(() => [
-        {
-            communityId: 1,
-            boardType: '일상',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 2,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 3,
-            boardType: '기타',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 4,
-            boardType: '일상',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 5,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 6,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 7,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 8,
-            boardType: '일상',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 9,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 10,
-            boardType: '기타',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 11,
-            boardType: '일상',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 12,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 13,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 14,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 15,
-            boardType: '일상',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 16,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 17,
-            boardType: '기타',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 18,
-            boardType: '일상',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 19,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 20,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-        {
-            communityId: 21,
-            boardType: '바프',
-            boardTitle: '제목입니다.',
-            boardAuthor: '작성자',
-            boardCreatedAt: '2025/02/15 12:20'
-        },
-    ], []);
-    const boardTypeList = useMemo(() => {
-        const types = boardList.map((board) => board.boardType);
-        return ['전체', ...Array.from(new Set(types))];
-    }, [boardList]);
+
+    const [searchType, setSearchType] = useState('제목만');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [boardList, setBoardList] = useState([]);
+    const [selectedType, setSelectedType] = useState('전체');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const itemsPerPage = 10;
+
+    useEffect(() => {
+        const fetchBoardList = async () => {
+            try {
+                let url = `/user/community/mylist?page=${currentPage - 1}&size=${itemsPerPage}`;
+                if (selectedType !== '전체') {
+                    url += `&communityType=${selectedType}`;
+                }
+
+                const response = await ApiClient.get(url);
+                setBoardList(response.data.content || []);
+                setTotalPages(response.data.totalPages || 1);
+            } catch (error) {
+                console.error("게시글 불러오기 실패:", error);
+                setBoardList([]);
+            }
+        };
+
+        fetchBoardList();
+    }, [selectedType, currentPage]);
+
+    const handleSearch = (type, query) => {
+
+        setCurrentPage(1);
+
+        const fetchBoardList = async () => {
+            try {
+                let url = `/user/community/mylist?page=0&size=${itemsPerPage}`;
+                if (type !== '전체') {
+                    url += `&communityType=${selectedType}`;
+                }
+
+                if (query.trim()) {
+                    url += `&searchType=${type}&searchQuery=${encodeURIComponent(query)}`;
+                }
+
+                const response = await ApiClient.get(url);
+                setBoardList(response.data.content || []);
+                setTotalPages(response.data.totalPages || 1);
+            } catch (error) {
+                console.error("게시글 불러오기 실패:", error);
+                setBoardList([]);
+            }
+        };
+
+        fetchBoardList();
+    };
+
     return (
         <div>
-            <BoardComponent boardList={boardList} boardTypeList={boardTypeList} />
+            <section className='h-[40px] mb-3'>
+                <CommunitySearchSection
+                    searchType={searchType}
+                    setSearchType={setSearchType}
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    handleSearch={handleSearch}
+                />
+            </section>
+            <section>
+                <BoardComponent
+                    boardList={boardList}
+                    totalPages={totalPages}
+                    setSelectedType={setSelectedType}
+                    selectedType={selectedType}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                />
+            </section>
         </div>
     );
 };

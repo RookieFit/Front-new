@@ -12,6 +12,7 @@ import CommunityDetail from "../components/Community/CommunityDetail";
 import FindPage from "../pages/Find/FindPage";
 import TodoList from "../components/Todo/TodoList";
 import MyCommunityPage from "../pages/Community/MyCommunityPage";
+import UpdateCommunityEditor from "../components/Community/UpdateCommunityEditor";
 
 const router = createBrowserRouter([
     {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
             {
                 path: "/editor",
                 element: <CommunityEditor />,
+            },
+            {
+                path: "/updatecommunity/:id",
+                element: <UpdateCommunityEditor />,
             },
             {
                 path: "/diet",

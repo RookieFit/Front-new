@@ -11,13 +11,15 @@ const CommunityDetail = () => {
             communityAuthor: '',
             communityType: '',
             communityContent: '',
-            communityCreatedAt: ''
-
+            communityCreatedAt: '',
+            communityUpdatedAt: '',
+            userProfileId: 0
         });
     const [newAnswer, setNewAnswer] = useState('');
     const [answerList, setAnswerList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [currentUserProfileId, setCurrentUserProfileId] = useState(0);
     const itemsPerPage = 5;
     const navigator = useNavigate();
 
@@ -33,6 +35,18 @@ const CommunityDetail = () => {
 
         fetchBoardList();
     }, [id]);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await ApiClient.get('/user/community/getProfileId');
+                setCurrentUserProfileId(response.data);
+            } catch (error) {
+                console.error('로그인 정보 가져오기 실패:', error);
+            }
+        };
+        fetchUser();
+    }, []);
 
     const fetchAnswerList = useCallback(async () => {
         try {
@@ -83,6 +97,10 @@ const CommunityDetail = () => {
         }
     };
 
+    const moveToUpdateEditor = () => {
+        navigator(`/updatecommunity/${id}`);
+    };
+
     return (
         <div className='flex flex-col m-10'>
             <header className='w-full'>
@@ -94,16 +112,17 @@ const CommunityDetail = () => {
                     <h1>제목: {post.communityTitle}</h1>
                     <h2>작성자: {post.communityAuthor}</h2>
                     <h3>작성일자: {post.communityCreatedAt}</h3>
+                    {post.communityUpdatedAt && <h3>수정일자: {post.communityUpdatedAt}</h3>}
                 </div>
                 <div className='m-2'>
                     <div dangerouslySetInnerHTML={{ __html: post.communityContent }} />
                 </div>
             </div>
             <hr className='border-2 border-rookieRed my-2' />
-            <div className='flex flex-row justify-end gap-2'>
-                <button>수정하기</button>
+            {post.userProfileId == currentUserProfileId && <div className='flex flex-row justify-end gap-2 mb-5'>
+                <button onClick={moveToUpdateEditor}>수정하기</button>
                 <button onClick={handleDeleteCommunity}>삭제하기</button>
-            </div>
+            </div>}
             <section>
                 {answerList.map((answer, index) => (
                     <div key={answer.communityAnswersId} className='flex flex-col m-2'>
@@ -114,11 +133,12 @@ const CommunityDetail = () => {
                         <p>{answer.communityAnswersContent}</p>
                     </div>
                 ))}
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                />
+                {answerList.length > 0 &&
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />}
                 <textarea
                     className='w-full p-2 border-2'
                     placeholder='댓글작성'

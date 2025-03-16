@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import ApiClient from '../../services/ApiClient';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Pagination from '../Common/Pagination';
 
 const CommunityDetail = () => {
@@ -19,6 +19,7 @@ const CommunityDetail = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const itemsPerPage = 5;
+    const navigator = useNavigate();
 
     useEffect(() => {
         const fetchBoardList = async () => {
@@ -67,6 +68,21 @@ const CommunityDetail = () => {
         setCurrentPage(pageNumber);
     };
 
+    const handleDeleteCommunity = async () => {
+        try {
+            const response = await ApiClient.delete(`/user/community/deleteCommunity?communityId=${id}`);
+            alert(response.data.message);
+            navigator('/community');
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                alert(error.response.data.message);
+            } else {
+                alert("삭제 중 오류가 발생했습니다.");
+            }
+            return;
+        }
+    };
+
     return (
         <div className='flex flex-col m-10'>
             <header className='w-full'>
@@ -84,6 +100,10 @@ const CommunityDetail = () => {
                 </div>
             </div>
             <hr className='border-2 border-rookieRed my-2' />
+            <div className='flex flex-row justify-end gap-2'>
+                <button>수정하기</button>
+                <button onClick={handleDeleteCommunity}>삭제하기</button>
+            </div>
             <section>
                 {answerList.map((answer, index) => (
                     <div key={answer.communityAnswersId} className='flex flex-col m-2'>

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import ApiClient from '../../services/ApiClient';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Pagination from '../Common/Pagination';
 
 const CommunityDetail = () => {
@@ -11,14 +11,17 @@ const CommunityDetail = () => {
             communityAuthor: '',
             communityType: '',
             communityContent: '',
-            communityCreatedAt: ''
-
+            communityCreatedAt: '',
+            communityUpdatedAt: '',
+            userProfileId: 0
         });
     const [newAnswer, setNewAnswer] = useState('');
     const [answerList, setAnswerList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [currentUserProfileId, setCurrentUserProfileId] = useState(0);
     const itemsPerPage = 5;
+    const navigator = useNavigate();
 
     useEffect(() => {
         const fetchBoardList = async () => {
@@ -32,6 +35,18 @@ const CommunityDetail = () => {
 
         fetchBoardList();
     }, [id]);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await ApiClient.get('/user/community/getProfileId');
+                setCurrentUserProfileId(response.data);
+            } catch (error) {
+                console.error('로그인 정보 가져오기 실패:', error);
+            }
+        };
+        fetchUser();
+    }, []);
 
     const fetchAnswerList = useCallback(async () => {
         try {
@@ -67,6 +82,25 @@ const CommunityDetail = () => {
         setCurrentPage(pageNumber);
     };
 
+    const handleDeleteCommunity = async () => {
+        try {
+            const response = await ApiClient.delete(`/user/community/deleteCommunity?communityId=${id}`);
+            alert(response.data.message);
+            navigator('/community');
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                alert(error.response.data.message);
+            } else {
+                alert("삭제 중 오류가 발생했습니다.");
+            }
+            return;
+        }
+    };
+
+    const moveToUpdateEditor = () => {
+        navigator(`/updatecommunity/${id}`);
+    };
+
     return (
         <div className='flex flex-col m-10'>
             <header className='w-full'>
@@ -78,12 +112,17 @@ const CommunityDetail = () => {
                     <h1>제목: {post.communityTitle}</h1>
                     <h2>작성자: {post.communityAuthor}</h2>
                     <h3>작성일자: {post.communityCreatedAt}</h3>
+                    {post.communityUpdatedAt && <h3>수정일자: {post.communityUpdatedAt}</h3>}
                 </div>
                 <div className='m-2'>
                     <div dangerouslySetInnerHTML={{ __html: post.communityContent }} />
                 </div>
             </div>
             <hr className='border-2 border-rookieRed my-2' />
+            {post.userProfileId == currentUserProfileId && <div className='flex flex-row justify-end gap-2 mb-5'>
+                <button onClick={moveToUpdateEditor}>수정하기</button>
+                <button onClick={handleDeleteCommunity}>삭제하기</button>
+            </div>}
             <section>
                 {answerList.map((answer, index) => (
                     <div key={answer.communityAnswersId} className='flex flex-col m-2'>
@@ -94,11 +133,12 @@ const CommunityDetail = () => {
                         <p>{answer.communityAnswersContent}</p>
                     </div>
                 ))}
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                />
+                {answerList.length > 0 &&
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />}
                 <textarea
                     className='w-full p-2 border-2'
                     placeholder='댓글작성'

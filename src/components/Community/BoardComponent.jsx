@@ -53,7 +53,7 @@ const BoardComponent = ({
                                 <Link to={`/community/${board.communityId}`} className={`flex flex-row m-3 gap-10 text-xs ${index !== boardList.length - 1 ? 'border-b border-gray-300 pb-2' : ''}`}>
                                     <p className='ml-3 w-[20px]'>{board.communityId}</p>
                                     <p>[{board.communityType}]</p>
-                                    <p className='w-1/2'>{board.communityTitle}</p>
+                                    <p className='w-1/2'>{board.communityTitle}{board.communityUpdatedAt && <strong> (수정됨)</strong>}</p>
                                     <p className='w-1/6'>{board.communityAuthor}</p>
                                     <p>{board.communityCreatedAt}</p>
                                 </Link>

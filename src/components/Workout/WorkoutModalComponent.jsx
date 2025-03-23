@@ -243,14 +243,16 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
                                     (<div className='w-[400px]'>
                                         {workoutDetailList.length > 0 ? <div className="mb-3 border-2 border-solid border-gray-300 p-5">
                                             <p className="text-lg h-1/2 font-semibold text-center overflow-y-auto mb-5">운동일지</p>
-                                            {workoutDetailList.map((workout, index) => (
-                                                <div key={index} className="flex flex-row justify-center items-center gap-5 mb-2">
-                                                    <p className="font-semibold w-1/3">{workout.workoutName}</p>
-                                                    <p>{`${workout.sets}`}세트</p>
-                                                    <p>{`${workout.reps}`}회</p>
-                                                    <p>{`${workout.restTime}`}초</p>
-                                                </div>
-                                            ))}
+                                            <div className='h-[130px] overflow-auto'>
+                                                {workoutDetailList.map((workout, index) => (
+                                                    <div key={index} className="flex flex-row justify-center items-center gap-5 mb-2">
+                                                        <p className="font-semibold w-1/3">{workout.workoutName}</p>
+                                                        <p>{`${workout.sets}`}세트</p>
+                                                        <p>{`${workout.reps}`}회</p>
+                                                        <p>{`${workout.restTime}`}초</p>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                             :
                                             <div className="flex flex-col justify-center items-center mb-3 border-2 border-solid border-gray-300 p-5">
@@ -270,7 +272,7 @@ const WorkoutModalComponent = ({ selectedDate, setIsOpen, title, comment, imageL
                             </div>
                         </div>
 
-                        <footer className="mt-5 flex justify-center gap-10 w-full">
+                        <footer className="flex justify-center gap-10 w-full">
                             {!isEdit ? <button
                                 className="bg-white rounded-lg text-gray-700 border-2 w-1/6 px-4 py-2 hover:opacity-50"
                                 onClick={() => setIsOpen(false)}

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { MdOutlineDeleteOutline } from 'react-icons/md';
 
 const EditWorkoutList = ({ setWorkoutDetailList, workoutDetailList, selectedDate }) => {
 
@@ -34,6 +35,10 @@ const EditWorkoutList = ({ setWorkoutDetailList, workoutDetailList, selectedDate
     // 숫자 유효성 검사 함수
     const isValidNumber = (value) => {
         return !isNaN(value) && value > 0;  // 숫자이고 0보다 큰 값만 유효
+    };
+
+    const handleDeleteWorkout = (index) => {
+        setWorkoutDetailList(prevList => prevList.filter((_, i) => i !== index));
     };
 
     return (
@@ -74,6 +79,10 @@ const EditWorkoutList = ({ setWorkoutDetailList, workoutDetailList, selectedDate
                             <p className="w-1/4 text-center">{workout.reps || '-'}회</p>
                             <p className="w-1/4 text-center">{workout.sets || '-'}세트</p>
                             <p className="w-1/4 text-center">{workout.restTime || '-'}초</p>
+                            <MdOutlineDeleteOutline
+                                className="cursor-pointer text-red-500 hover:text-red-700 text-3xl"
+                                onClick={() => handleDeleteWorkout(index)}
+                            />
                         </div>
                     ))}
                 </div>

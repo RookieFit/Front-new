@@ -1,107 +1,144 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ApiClient from '../../services/ApiClient';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import Pagination from '../Common/Pagination';
 
 const CommunityDetail = () => {
     const { id } = useParams();
     const [post, setPost] = useState(
         {
-            title: 'ㄴㅇㄻㄴㅇㄹㄹㄴㅇㄹ',
-            author: '작성자',
-            boardType: '바프',
-            content: '<p>ㅁㄴㅇㄻㄴㅇㄹ</p><p>ㅁㄴㅇㄻㄴㅇㄹ</p>'
+            communityTitle: '',
+            communityAuthor: '',
+            communityType: '',
+            communityContent: '',
+            communityCreatedAt: '',
+            communityUpdatedAt: '',
+            userProfileId: 0
         });
-    const [answerList, setAnswerList] = useState([
-        {
-            answerId: 1,
-            answerAuthor: '댓글작성자',
-            content: '댓글입니다',
-            answerCreatedAt: '2025. 02. 10. 22:06'
-        },
-        {
-            answerId: 2,
-            answerAuthor: '댓글작성자',
-            content: '댓글입니다',
-            answerCreatedAt: '2025. 02. 12. 22:06'
-        },
-        {
-            answerId: 3,
-            answerAuthor: '댓글작성자',
-            content: '댓글입니다',
-            answerCreatedAt: '2025. 02. 13. 22:06'
-        },
-        {
-            answerId: 4,
-            answerAuthor: '댓글작성자',
-            content: '댓글입니다',
-            answerCreatedAt: '2025. 02. 16. 22:06'
-        },
-    ]);
-
     const [newAnswer, setNewAnswer] = useState('');
+    const [answerList, setAnswerList] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [currentUserProfileId, setCurrentUserProfileId] = useState(0);
+    const itemsPerPage = 5;
+    const navigator = useNavigate();
 
-    //todo: 댓글추가 작성자부분 해당 userid나 이름이 들어감
+    useEffect(() => {
+        const fetchBoardList = async () => {
+            try {
+                const response = await ApiClient.get(`/user/community/detail?communityId=${id}`);
+                setPost(response.data);
+            } catch (error) {
+                console.error("게시글 불러오기 실패:", error);
+            }
+        };
+
+        fetchBoardList();
+    }, [id]);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await ApiClient.get('/user/community/getProfileId');
+                setCurrentUserProfileId(response.data);
+            } catch (error) {
+                console.error('로그인 정보 가져오기 실패:', error);
+            }
+        };
+        fetchUser();
+    }, []);
+
+    const fetchAnswerList = useCallback(async () => {
+        try {
+            const response = await ApiClient.get(`/user/community/${id}/answer/list?page=${currentPage - 1}&size=${itemsPerPage}`);
+            setAnswerList(response.data.content || []);
+            setTotalPages(response.data.totalPages || 1);
+        } catch (error) {
+            console.error("댓글 불러오기 실패:", error);
+            setAnswerList([]);
+        }
+    }, [id, currentPage]);
+
+    useEffect(() => {
+        fetchAnswerList();
+    }, [fetchAnswerList]);
+
+
     const handleAddAnswer = async () => {
         if (newAnswer.trim() === '') return;
-        const now = new Date();
-        const formattedDate = now.toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        });
-        const formattedTime = now.toLocaleTimeString('ko-KR', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-        });
-        //todo: 나중에 백엔드 추가 후 answerId삭제
-        const newComment = {
-            answerId: answerList.length + 1,
-            answerAuthor: '댓글 추가 작성자',
-            content: newAnswer,
-            answerCreatedAt: `${formattedDate} ${formattedTime}`,
-            communityId: id
-        };
-        /*try {
-            const response = await ApiClient.post('/api/user/community/answer/create', newComment);
-            const createComment = {
-                ...newComment,
-                id: response.data.answerId
-            };
-            setAnswerList([...answerList, response, createComment]);
+        const newComment = { communityAnswersContent: newAnswer };
+
+        try {
+            await ApiClient.post(`/user/community/${id}/answer/create`, newComment);
             setNewAnswer('');
+            fetchAnswerList();
         } catch (error) {
             console.log("댓글오류" + error);
-        };*/
-        setAnswerList([...answerList, newComment]);
+        };
         setNewAnswer('');
     };
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const handleDeleteCommunity = async () => {
+        try {
+            const response = await ApiClient.delete(`/user/community/deleteCommunity?communityId=${id}`);
+            alert(response.data.message);
+            navigator('/community');
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                alert(error.response.data.message);
+            } else {
+                alert("삭제 중 오류가 발생했습니다.");
+            }
+            return;
+        }
+    };
+
+    const moveToUpdateEditor = () => {
+        navigator(`/updatecommunity/${id}`);
+    };
+
     return (
         <div className='flex flex-col m-10'>
             <header className='w-full'>
-                <h1 className='text-3xl font-bold'>{post.boardType}</h1>
+                <h1 className='text-3xl font-bold'>{post.communityType}</h1>
                 <hr className='border-2 border-rookieRed my-2' />
             </header>
             <div className='flex flex-col'>
                 <div className='border-2 p-2 mb-3'>
-                    <h1>제목: {post.title}</h1>
-                    <h2>작성자: {post.author}</h2>
+                    <h1>제목: {post.communityTitle}</h1>
+                    <h2>작성자: {post.communityAuthor}</h2>
+                    <h3>작성일자: {post.communityCreatedAt}</h3>
+                    {post.communityUpdatedAt && <h3>수정일자: {post.communityUpdatedAt}</h3>}
                 </div>
                 <div className='m-2'>
-                    <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                    <div dangerouslySetInnerHTML={{ __html: post.communityContent }} />
                 </div>
             </div>
             <hr className='border-2 border-rookieRed my-2' />
+            {post.userProfileId == currentUserProfileId && <div className='flex flex-row justify-end gap-2 mb-5'>
+                <button onClick={moveToUpdateEditor}>수정하기</button>
+                <button onClick={handleDeleteCommunity}>삭제하기</button>
+            </div>}
             <section>
                 {answerList.map((answer, index) => (
-                    <div key={answer.answerId} className='flex flex-col m-2'>
+                    <div key={answer.communityAnswersId} className='flex flex-col m-2'>
                         <div className='flex flex-raw gap-2 items-baseline border-b-2'>
-                            <p>{answer.answerAuthor}</p>
-                            <p className='text-xs'>{answer.answerCreatedAt}</p>
+                            <p>{answer.communityAnswersAuthor}</p>
+                            <p className='text-xs'>{answer.communityAnswersCreatedAt}</p>
                         </div>
-                        <p>{answer.content}</p>
+                        <p>{answer.communityAnswersContent}</p>
                     </div>
                 ))}
+                {answerList.length > 0 &&
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />}
                 <textarea
                     className='w-full p-2 border-2'
                     placeholder='댓글작성'

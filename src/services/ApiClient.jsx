@@ -2,11 +2,11 @@ import axios from "axios";
 import { clearAccessToken, getAccessToken, setAccessToken } from "./Store";
 import { refreshAccessToken } from "./Auth";
 
-const testUrl = 'http://localhost:8080';
-const requestUrl = 'http://pipakmjhomeserver.ddns.net';
+const TEST_API_BASE_URL = import.meta.env.VITE_API_TEST_URL;
+const REQUEST_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ApiClient = axios.create({
-    baseURL: `${testUrl}/api`,
+    baseURL: `${TEST_API_BASE_URL}/api`,
     headers: {
         "Content-Type": "application/json"
     }

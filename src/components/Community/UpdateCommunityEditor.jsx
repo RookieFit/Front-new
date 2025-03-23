@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import TipTapEditor from '../Common/TipTapEditor';
 import ApiClient from '../../services/ApiClient';
 
-const CommunityEditor = () => {
+function UpdateCommunityEditor() {
+    const { id } = useParams();
     const [title, setTitle] = useState("");
     const [content, setContent] = useState(null);
     const [communityType, setCommunityType] = useState("바프");
@@ -11,11 +12,26 @@ const CommunityEditor = () => {
     const [isSaving, setIsSaving] = useState(false);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const fetchBoardList = async () => {
+            try {
+                const response = await ApiClient.get(`/user/community/detail?communityId=${id}`);
+                setTitle(response.data.communityTitle);
+                setContent(response.data.communityContent);
+                setCommunityType(response.data.communityType);
+            } catch (error) {
+                console.error("게시글 불러오기 실패:", error);
+            }
+        };
+
+        fetchBoardList();
+    }, [id]);
+
     const handleImageUpload = (file) => {
         setImages((prev) => [...prev, file]);
     };
 
-    const handleSave = async () => {
+    const handleUpdate = async () => {
         try {
             if (!content) return alert('내용을 입력하세요');
             setIsSaving(true);
@@ -30,39 +46,38 @@ const CommunityEditor = () => {
                 );
 
                 if (response.data) {
-                    imageUrls = response.data; // Store the response data (URLs)
+                    imageUrls = response.data;
                 }
             }
 
-            //이미지파일 저장후 url를 response로 받고 blob으로 시작하는 주소를 변경
             let updatedContent = content;
             imageUrls.forEach((url) => {
-                updatedContent = updatedContent.replace(/blob:[^"]+/, url); // Replace 'blob' URLs with actual URLs
+                updatedContent = updatedContent.replace(/blob:[^"]+/, url);
             });
 
-            const requestData = {
+            const updatedData = {
                 communityTitle: title,
                 communityContent: updatedContent,
                 communityType: communityType,
             };
 
-            //img 태그의 이미지 주소 변경후 백에 제목과 함께 콘텐츠 저장
-            const saveResponse = await ApiClient.post("/user/community/createCommunity", requestData);
+            const updateResponse = await ApiClient.put(`/user/community/updateCommunity?communityId=${id}`, updatedData);
 
-            alert(saveResponse.data.message);
-            navigate('/community'); // 저장 후 이동
+            alert(updateResponse.data.message);
+            navigate(`/community/${id}`);
         } catch (error) {
             console.error("게시글 저장 실패:", error);
         } finally {
             setIsSaving(false);
         }
     };
+
     return (
         <div className="relative p-4 h-full">
-            <h1 className="text-xl font-bold mb-2">게시글 작성</h1>
+            <h1 className="text-xl font-bold mb-2">게시글 수정</h1>
             <input
                 type="text"
-                placeholder="제목을 입력하세요"
+                placeholder={title}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="border p-2 w-full mb-4"
@@ -78,7 +93,7 @@ const CommunityEditor = () => {
                 <option>기타</option>
             </select>
             <TipTapEditor content={content} onChange={setContent} onImageUpload={handleImageUpload} />
-            <button onClick={handleSave} className="mt-4 bg-blue-500 text-white px-4 py-2">저장</button>
+            <button className="mt-4 bg-blue-500 text-white px-4 py-2" onClick={handleUpdate}>수정하기</button>
 
             {isSaving && (
                 <div className="absolute top-0 left-0 w-full h-full bg-gray-500 opacity-40 z-10"></div>
@@ -92,4 +107,4 @@ const CommunityEditor = () => {
     );
 };
 
-export default CommunityEditor;
+export default UpdateCommunityEditor;

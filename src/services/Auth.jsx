@@ -2,9 +2,11 @@ import axios from "axios";
 import { clearAccessToken, setAccessToken } from "./Store";
 
 export const refreshAccessToken = async () => {
+    const TEST_API_BASE_URL = import.meta.env.VITE_API_TEST_URL;
+    const REQUEST_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     try {
         const response = await axios.post(
-            '/auth/refresh',
+            `${TEST_API_BASE_URL}/api/auth/refresh`,
             {},
             { withCredentials: true }
         );

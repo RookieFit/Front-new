@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Chart from "react-apexcharts";
+import ApiClient from '../../services/ApiClient';
+import PropTypes from 'prop-types';
 
-const MyPageUserInfoGraph = () => {
-    const [chartData] = useState({
+const MyPageUserInfoGraph = ({ pageKey }) => {
+    const [chartData, setChartData] = useState({
         series: [
             {
                 name: "Weight (kg)",
                 type: "line",
-                data: [80, 101, 123, 90, 21],
+                data: [],
             },
         ],
         options: {
@@ -26,7 +28,7 @@ const MyPageUserInfoGraph = () => {
                     labels: { style: { colors: "#000" } },
                 },
             ],
-            colors: ["#FF4560"],
+            colors: ["#000"],
             grid: {
                 show: true,
                 padding: {
@@ -39,17 +41,39 @@ const MyPageUserInfoGraph = () => {
             dataLabels: {
                 enabled: true,
                 style: {
-                    colors: ["#FF4560",], // 각 시리즈에 맞는 색상 설정
+                    colors: ["#000",], // 각 시리즈에 맞는 색상 설정
                 },
                 formatter: (value) => value.toFixed(2),
             },
         },
     });
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await ApiClient.get("/user/userdata/getuserweightdata");
+                const weights = response.data.map(item => parseFloat(item.userInfoWeight));
+                const dates = response.data.map(item => item.userInfoInbodyDate);
+
+                setChartData(prevState => ({
+                    ...prevState,
+                    series: [{ ...prevState.series[0], data: weights }],
+                    options: { ...prevState.options, xaxis: { categories: dates } },
+                }));
+            } catch (error) {
+                console.error("Error fetching weight data:", error);
+            }
+        };
+
+        fetchData();
+    }, [pageKey]);
     return (
         <div className='px-10'>
             <Chart options={chartData.options} series={chartData.series} type="line" height={250} />
         </div>
     );
+};
+MyPageUserInfoGraph.propTypes = {
+    pageKey: PropTypes.number.isRequired,
 };
 
 export default MyPageUserInfoGraph;

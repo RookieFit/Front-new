@@ -40,7 +40,7 @@ const MyPage = () => {
                 </section>
                 <section className='h-3/4 p-5 border-2 bg-white shadow-md'>
                     <div className='h-full overflow-auto'>
-                        <MyPageGraphSection />
+                        <MyPageGraphSection pageKey={pageKey} />
                     </div>
                 </section>
             </section>

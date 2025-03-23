@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Chart from "react-apexcharts";
+import ApiClient from '../../services/ApiClient';
+import PropTypes from 'prop-types';
 
-const MyPageUserFatGraph = () => {
-    const [chartData] = useState({
+const MyPageUserFatGraph = ({ pageKey }) => {
+    const [chartData, setChartData] = useState({
         series: [
             {
                 name: "Fat (%)",
                 type: "line",
-                data: [80, 101, 123, 90, 21],
+                data: [],
             },
         ],
         options: {
@@ -39,17 +41,39 @@ const MyPageUserFatGraph = () => {
             dataLabels: {
                 enabled: true,
                 style: {
-                    colors: ["#FFC107",],
+                    colors: ["#FFC107",], // 각 시리즈에 맞는 색상 설정
                 },
                 formatter: (value) => value.toFixed(2),
             },
         },
     });
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await ApiClient.get("/user/userdata/getuserfatdata");
+                const fats = response.data.map(item => parseFloat(item.userInfoFatMass));
+                const dates = response.data.map(item => item.userInfoInbodyDate);
+
+                setChartData(prevState => ({
+                    ...prevState,
+                    series: [{ ...prevState.series[0], data: fats }],
+                    options: { ...prevState.options, xaxis: { categories: dates } },
+                }));
+            } catch (error) {
+                console.error("Error fetching fat data:", error);
+            }
+        };
+
+        fetchData();
+    }, [pageKey]);
     return (
         <div className='px-10'>
             <Chart options={chartData.options} series={chartData.series} type="line" height={250} />
         </div>
     );
+};
+MyPageUserFatGraph.propTypes = {
+    pageKey: PropTypes.number.isRequired,
 };
 
 export default MyPageUserFatGraph;

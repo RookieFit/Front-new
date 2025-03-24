@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MyPageProfile from '../../components/MyPage/MyPageProfile';
 import MyPageUserTab from '../../components/MyPage/MyPageUserTab';
-import MyPageWorkoutGraph from '../../components/MyPage/MyPageWorkoutGraph';
+import MyPageGraphSection from '../../components/MyPage/MyPageGraphSection';
 import Modal from '../../components/Common/Modal';
 import UpdateProfileModalComponent from '../../components/MyPage/UpdateProfileModalComponent';
 
@@ -40,7 +40,7 @@ const MyPage = () => {
                 </section>
                 <section className='h-3/4 p-5 border-2 bg-white shadow-md'>
                     <div className='h-full overflow-auto'>
-                        <MyPageWorkoutGraph />
+                        <MyPageGraphSection pageKey={pageKey} />
                     </div>
                 </section>
             </section>

@@ -7,19 +7,18 @@ const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods 
 	const [searchTerm, setSearchTerm] = useState('');
 	const [selectedFood, setSelectedFood] = useState(null);
 	const [addedFoods, setAddedFoods] = useState(initialAddedFoods);
-	const [userId, setUserId] = useState('mmglo');
 
 	useEffect(() => {
 		setAddedFoods(initialAddedFoods);
 	}, [initialAddedFoods]);
 
 	const handleFoodClick = (food) => {
-		setSelectedFood(prevFood => (prevFood && prevFood.foodName === food.foodName ? null : food));
+		setSelectedFood((prevFood) => (prevFood && prevFood.foodName === food.foodName ? null : food));
 	};
 
 	const handleAddFood = (newFood) => {
 		setAddedFoods((prevFoods) => {
-			if (!prevFoods.find(food => food.id === newFood.id)) {
+			if (!prevFoods.find((food) => food.id === newFood.id)) {
 				return [...prevFoods, newFood];
 			}
 			return prevFoods;
@@ -27,15 +26,21 @@ const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods 
 	};
 
 	const handleRemoveFood = (foodToRemove) => {
-		setAddedFoods((prevFoods) => prevFoods.filter(food => food.id !== foodToRemove.id));
+		setAddedFoods((prevFoods) => prevFoods.filter((food) => food.id !== foodToRemove.id));
 	};
 
+	// 식단을 서버에 저장하는 함수
 	const saveDietToDatabase = async () => {
+		const token = sessionStorage.getItem('accessToken');
+		if (!token) {
+			alert('로그인이 필요합니다.');
+			return;
+		}
+
 		try {
 			const dietData = {
-				userId: userId,
 				dietDate: new Date().toISOString().split('T')[0],
-				dietDetails: addedFoods.map(food => ({
+				dietDetails: addedFoods.map((food) => ({
 					id: food.id,
 					foodName: food.foodName,
 					foodFirstCategory: food.foodFirstCategory,
@@ -46,7 +51,13 @@ const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods 
 				})),
 			};
 
-			const response = await ApiClient.post('/diet/list/add', dietData);
+			const response = await ApiClient.post('/diet/list/add', dietData, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			});
+
 			if (response.status === 200) {
 				alert('식단이 저장되었습니다!');
 				handleSaveFood(addedFoods);

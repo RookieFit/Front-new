@@ -31,7 +31,6 @@ const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods 
 
     const handleSave = () => {
         saveDietToDatabase();
-        setIsModalOpen(false);
     };
 
     const saveDietToDatabase = async () => {

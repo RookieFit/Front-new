@@ -7,7 +7,6 @@ import { ko } from "date-fns/locale";
 import axios from "axios";
 import FoodChart from "./FoodChart";
 
-// AteFoodList.js
 const AteFoodList = ({ handleSaveFood, selectedDate }) => {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);

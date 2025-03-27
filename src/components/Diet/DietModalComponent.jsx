@@ -29,6 +29,11 @@ const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods 
         setAddedFoods((prevFoods) => prevFoods.filter((food) => food.id !== foodToRemove.id));
     };
 
+    const handleSave = () => {
+        saveDietToDatabase();
+        setIsModalOpen(false);
+    };
+
     const saveDietToDatabase = async () => {
         const token = sessionStorage.getItem('accessToken');
         if (!token) {
@@ -70,9 +75,6 @@ const DietModalComponent = ({ setIsModalOpen, handleSaveFood, initialAddedFoods 
         }
     };
 
-    const handleSave = () => {
-        saveDietToDatabase();
-    };
 
     return (
         <div className="w-[950px] h-[700px] relative flex flex-col p-6">

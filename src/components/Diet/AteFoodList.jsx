@@ -7,6 +7,7 @@ import { ko } from "date-fns/locale";
 import axios from "axios";
 import FoodChart from "./FoodChart";
 
+// AteFoodList.js
 const AteFoodList = ({ handleSaveFood, selectedDate }) => {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,6 +49,10 @@ const AteFoodList = ({ handleSaveFood, selectedDate }) => {
             console.error("식단을 불러오는 데 문제가 발생했습니다.", error);
             alert("식단을 불러오는 데 문제가 발생했습니다.");
         }
+    };
+
+    const handleSaveFoodInParent = (newFoods) => {
+        setAteFoodList(newFoods);
     };
 
     useEffect(() => {
@@ -104,7 +109,7 @@ const AteFoodList = ({ handleSaveFood, selectedDate }) => {
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <DietModalComponent
                     setIsModalOpen={setIsModalOpen}
-                    handleSaveFood={handleSaveFood}
+                    handleSaveFood={handleSaveFoodInParent}
                     initialAddedFoods={ateFoodList}
                     selectedDate={selectedDate}
                 />

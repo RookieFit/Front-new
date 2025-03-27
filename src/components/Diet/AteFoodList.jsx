@@ -64,7 +64,7 @@ const AteFoodList = ({ handleSaveFood, selectedDate }) => {
                 {selectedDate} 섭취한 식단 리스트
             </p>
             <hr className="w-[90%] border mt-5 mx-auto" />
-            <p className="text-lg font-semibold text-gray-700 mt-2 -ml-[%]">
+            <p className="text-lg font-semibold text-gray-700 mt-2">
                 총 섭취 칼로리: {totalCalories} kcal
             </p>
 
@@ -72,7 +72,7 @@ const AteFoodList = ({ handleSaveFood, selectedDate }) => {
                 <FoodChart ateFoodList={ateFoodList} />
             </div>
 
-            <ul className="-mt-[57%] space-y-2 max-h-[350px] overflow-auto w-[80%] mb-">
+            <ul className="-mt-[57%] space-y-2 max-h-[350px] overflow-auto w-[80%]">
                 {ateFoodList.length === 0 ? (
                     <p className="text-center text-gray-500">추가된 식단이 없습니다.</p>
                 ) : (

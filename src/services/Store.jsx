@@ -13,5 +13,5 @@ export const clearAccessToken = () => {
 };
 
 export const removeAccessToken = () => {
-    localStorage.removeItem('accessToken');
+    sessionStorage.removeItem('accessToken');
 };

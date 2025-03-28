@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const FoodSearchBar = ({ onSearch, searchTerm }) => {
 	const handleInputChange = (e) => {

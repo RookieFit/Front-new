@@ -4,7 +4,6 @@ import LoginPage from "../pages/Login/LoginPage";
 import Workout from "../components/Workout/Workout";
 import MyPage from "../pages/MyPage/MyPage";
 import MainPage from "../pages/Main/MainPage";
-import Diet from "../components/Diet/Diet";
 import CommunityPage from "../pages/Community/CommunityPage";
 import CommunityEditor from "../components/Community/CommunityEditor";
 import SignUpPage from "../pages/SignUp/SignUpPage";
@@ -13,6 +12,7 @@ import FindPage from "../pages/Find/FindPage";
 import TodoList from "../components/Todo/TodoList";
 import MyCommunityPage from "../pages/Community/MyCommunityPage";
 import UpdateCommunityEditor from "../components/Community/UpdateCommunityEditor";
+import DietPage from "../pages/Diet/DietPage";
 
 const router = createBrowserRouter([
     {
@@ -53,7 +53,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/diet",
-                element: <Diet />,
+                element: <DietPage />,
             },
             {
                 path: "/todolist",

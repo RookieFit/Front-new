@@ -1,23 +1,78 @@
-import React, { useState } from 'react';
-import Modal from '../Common/Modal';
-import DietModalComponent from './DietModalComponent';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Modal from "../Common/Modal";
+import DietModalComponent from "./DietModalComponent";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
+import axios from "axios";
+import FoodChart from "./FoodChart";
 
-const AteFoodList = ({ handleSaveFood, ateFoodList }) => {
+const AteFoodList = ({ handleSaveFood, selectedDate }) => {
+    const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [expandedIndex, setExpandedIndex] = useState(null);
+    const [ateFoodList, setAteFoodList] = useState([]);
+    const [totalCalories, setTotalCalories] = useState(0);
 
     const toggleDropdown = (index) => {
         setExpandedIndex(expandedIndex === index ? null : index);
     };
 
+    const formatDate = (date) => {
+        const dateObj = typeof date === 'string' ? new Date(date) : date;
+        return format(dateObj, 'yyyy-MM-dd', { locale: ko });
+    };
+
+    const fetchDietList = async (date) => {
+        try {
+            const token = sessionStorage.getItem("accessToken");
+            if (!token) {
+                alert("사용자 인증 정보가 없습니다. 로그인 후 다시 시도해주세요.");
+                navigate("/login");
+                return;
+            }
+
+            const formattedDate = formatDate(date);
+            const response = await axios.get(`http://localhost:8080/api/diet?dietDate=${formattedDate}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (response.data) {
+                setAteFoodList(response.data.dietDetails || []);
+                setTotalCalories(response.data.totalCalories || 0);
+            } else {
+                setAteFoodList([]);
+                setTotalCalories(0);
+            }
+        } catch (error) {
+            console.error("식단을 불러오는 데 문제가 발생했습니다.", error);
+            alert("식단을 불러오는 데 문제가 발생했습니다.");
+        }
+    };
+
+    const handleSaveFoodInParent = (newFoods) => {
+        setAteFoodList(newFoods);
+    };
+
+    useEffect(() => {
+        fetchDietList(selectedDate);
+    }, [selectedDate]);
+
     return (
         <div className="w-full flex flex-col items-center min-h-[500px]">
-            {/* 제목 */}
-            <p className="text-2xl font-bold mr-[390px] pl-5">오늘 섭취한 식단 리스트</p>
+            <p className="text-2xl font-bold -ml-[45%] pl-5">
+                {selectedDate} 섭취한 식단 리스트
+            </p>
             <hr className="w-[90%] border mt-5 mx-auto" />
+            <p className="text-lg font-semibold text-gray-700 mt-2">
+                총 섭취 칼로리: {totalCalories} kcal
+            </p>
 
-            {/* 음식 리스트 */}
-            <ul className="mt-5 space-y-2 max-h-[350px] overflow-auto w-[80%]">
+            <div className="mr-[220%] -mt-10">
+                <FoodChart ateFoodList={ateFoodList} />
+            </div>
+
+            <ul className="-mt-[57%] space-y-2 max-h-[350px] overflow-auto w-[80%]">
                 {ateFoodList.length === 0 ? (
                     <p className="text-center text-gray-500">추가된 식단이 없습니다.</p>
                 ) : (
@@ -41,17 +96,21 @@ const AteFoodList = ({ handleSaveFood, ateFoodList }) => {
                 )}
             </ul>
 
-            {/* 모달 버튼 */}
             <div className="mt-auto mb-0">
-                <button className="bg-rookieRed text-white font-semibold py-3 px-5 rounded-lg" onClick={() => setIsModalOpen(true)}>식단 검색 및 추가하기</button>
+                <button
+                    className="bg-rookieRed text-white font-semibold py-3 px-5 rounded-lg"
+                    onClick={() => setIsModalOpen(true)}
+                >
+                    식단 검색 및 추가하기
+                </button>
             </div>
 
-            {/* 모달 */}
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <DietModalComponent
                     setIsModalOpen={setIsModalOpen}
-                    handleSaveFood={handleSaveFood}
+                    handleSaveFood={handleSaveFoodInParent}
                     initialAddedFoods={ateFoodList}
+                    selectedDate={selectedDate}
                 />
             </Modal>
         </div>

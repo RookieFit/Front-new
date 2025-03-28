@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import ApiClient from '../../services/ApiClient';
+import PropTypes from 'prop-types';
 
 const FoodSearchResult = ({
     searchQuery,
@@ -6,26 +8,33 @@ const FoodSearchResult = ({
     selectedFood,
     handleAddFood,
 }) => {
-    const foodData = [
-        { id: 1, foodName: "닭가슴살", enerc: 165, chocdf: 2, prot: 31, fatce: 3 },
-        { id: 2, foodName: "고구마", enerc: 112, chocdf: 27, prot: 2, fatce: 0.1 },
-        { id: 3, foodName: "현미밥", enerc: 216, chocdf: 45, prot: 5, fatce: 1.5 },
-        { id: 4, foodName: "샐러드", enerc: 30, chocdf: 5, prot: 2, fatce: 0.5 },
-        { id: 5, foodName: "바나나", enerc: 105, chocdf: 27, prot: 1, fatce: 0.3 },
-        { id: 6, foodName: "오트밀", enerc: 389, chocdf: 66, prot: 11, fatce: 6 },
-        { id: 7, foodName: "연어", enerc: 208, chocdf: 0, prot: 20, fatce: 13 }
-    ];
+    const [foodData, setFoodData] = useState([]);
 
-    const filteredFoods = foodData.filter((food) =>
-        food.foodName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // API 호출 함수
+    const fetchFoodData = async (query) => {
+        try {
+            const response = await ApiClient.get(`/diet/search?keyword=${query}`);
+            setFoodData(response.data);
+        } catch (error) {
+            console.error("API 호출 실패:", error);
+        }
+    };
+
+    // searchQuery가 변경될 때마다 API 호출
+    useEffect(() => {
+        if (searchQuery) {
+            fetchFoodData(searchQuery);
+        } else {
+            setFoodData([]); // 검색어가 없으면 결과를 비움
+        }
+    }, [searchQuery]);
 
     return (
         <div className="overflow-auto max-h-[300px]">
-            {filteredFoods.length > 0 ? (
-                filteredFoods.map((food, index) => (
+            {foodData.length > 0 ? (
+                foodData.map((food) => (
                     <div
-                        key={index}
+                        key={food.id}
                         className="p-4 border-b cursor-pointer hover:bg-gray-100"
                         onClick={() => handleFoodClick(food)}
                     >
@@ -38,7 +47,7 @@ const FoodSearchResult = ({
                                 <p><strong>단백질:</strong> {food.prot} g</p>
                                 <p><strong>지방:</strong> {food.fatce} g</p>
                                 <button
-                                    onClick={() => handleAddFood(food)} // food 정보를 직접 전달
+                                    onClick={() => handleAddFood(food)}
                                     className="mt-6 mb-[-10%] ml-24 w-[40%] bg-rookieRed text-white py-2 rounded-lg"
                                 >
                                     추가하기
@@ -52,6 +61,13 @@ const FoodSearchResult = ({
             )}
         </div>
     );
+};
+
+FoodSearchResult.propTypes = {
+    searchQuery: PropTypes.string.isRequired,
+    handleFoodClick: PropTypes.func.isRequired,
+    selectedFood: PropTypes.object,
+    handleAddFood: PropTypes.func.isRequired,
 };
 
 export default FoodSearchResult;

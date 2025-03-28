@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import "cally";
 import ApiClient from "../../services/ApiClient";
+import FoodChart from "../Diet/FoodChart";
+import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 const SectionCard = ({ title, children }) => {
@@ -24,8 +27,36 @@ const Main = () => {
     const [selectedDate, setSelectedDate] = useState("");
     const [todoList, setTodoList] = useState([]);
     const [checkedTodos, setCheckedTodos] = useState({});
+    const [todayDiet, setTodayDiet] = useState([]);
+    const [totalCalories, setTotalCalories] = useState(0);
 
     const callyRef = useRef(null);
+
+    // 오늘 날짜 포맷팅
+    const today = format(new Date(), 'yyyy-MM-dd');
+
+    // 오늘의 식단 데이터 가져오기
+    useEffect(() => {
+        const fetchTodayDiet = async () => {
+            try {
+                const token = sessionStorage.getItem('accessToken');
+                if (!token) return;
+
+                const response = await ApiClient.get(`/diet?dietDate=${today}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (response.data) {
+                    setTodayDiet(response.data.dietDetails || []);
+                    setTotalCalories(response.data.totalCalories || 0);
+                }
+            } catch (error) {
+                console.error("오늘의 식단을 불러오는데 실패했습니다:", error);
+            }
+        };
+
+        fetchTodayDiet();
+    }, [today]);
 
     useEffect(() => {
         const callyEl = callyRef.current;
@@ -89,7 +120,26 @@ const Main = () => {
                         <SectionCard title="오늘날씨" />
                     </div>
                     <div className="flex-[2]">
-                        <SectionCard title="식단" />
+                        <SectionCard title="식단">
+                            {todayDiet.length > 0 ? (
+                                <div className="flex flex-col items-center">
+                                    <p className="text-sm mb-1 text-black">총 {totalCalories} kcal</p>
+                                    <div className="w-full">
+                                        <FoodChart ateFoodList={todayDiet} />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center h-full text-black">
+                                    <p className="mb-16">오늘의 식단을 입력해보세요</p>
+                                    <Link
+                                        to="/diet"
+                                        className="bg-rookieRed text-white px-3 py-1 rounded-lg hover:opacity-80"
+                                    >
+                                        식단 입력하기
+                                    </Link>
+                                </div>
+                            )}
+                        </SectionCard>
                     </div>
                 </div>
 

@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import ApiClient from "../../services/ApiClient";
 import { useNavigate } from "react-router-dom";
 import { setAccessToken } from "../../services/Store";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Login = () => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
+    const { login } = useAuth();
 
     const navigate = useNavigate();
 
@@ -23,7 +25,7 @@ const Login = () => {
             );
             const accessToken = response.data;
             setAccessToken(accessToken);
-
+            login(accessToken); // AuthContext의 login 함수 호출
             navigate('/');
         } catch (error) {
             if (error.response) {

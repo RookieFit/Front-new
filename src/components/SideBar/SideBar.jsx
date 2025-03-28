@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { menuItems } from './menuItems';
+import { useAuth } from '../../contexts/AuthContext';
 
 const SideBar = ({ isCollapsed, toggleSidebar }) => {
     const [openMenu, setOpenMenu] = useState(null);
+    const { isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
 
-    // 로그아웃 항목을 분리
-    const normalMenuItems = menuItems.filter(item => item.name !== "로그아웃");
-    const logoutItem = menuItems.find(item => item.name === "로그아웃");
+    // 로그인 상태에 따라 메뉴 필터링
+    const normalMenuItems = menuItems.filter(item => item.name !== "로그아웃" && item.name !== "로그인");
+
+    const handleAuthAction = async () => {
+        if (isAuthenticated) {
+            // 로그아웃 처리
+            await logout();
+            navigate('/login');
+        } else {
+            // 로그인 페이지로 이동
+            navigate('/login');
+        }
+    };
 
     const toggleMenu = (index) => {
         if (openMenu === index) {
@@ -63,19 +76,17 @@ const SideBar = ({ isCollapsed, toggleSidebar }) => {
                 </ul>
             </nav>
 
-            {/* 하단에 로그아웃 버튼 */}
-            {logoutItem && (
-                <div className="mb-4">
-                    <Link
-                        to={logoutItem.subItems?.[0]?.path || '/logout'} // 필요에 따라 경로 수정
-                        className="block text-white p-4 hover:bg-rookieHover rounded mx-4"
-                    >
-                        <span className={`transition-opacity ${isCollapsed ? 'opacity-0' : 'opacity-100 delay-100'}`}>
-                            {logoutItem.name}
-                        </span>
-                    </Link>
-                </div>
-            )}
+            {/* 로그인/로그아웃 버튼 */}
+            <div className="mb-4">
+                <button
+                    onClick={handleAuthAction}
+                    className="block w-full text-left text-white p-4 hover:bg-rookieHover rounded mx-4"
+                >
+                    <span className={`transition-opacity ${isCollapsed ? 'opacity-0' : 'opacity-100 delay-100'}`}>
+                        {isAuthenticated ? "로그아웃" : "로그인"}
+                    </span>
+                </button>
+            </div>
         </aside>
     );
 };

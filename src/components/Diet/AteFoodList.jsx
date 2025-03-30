@@ -69,7 +69,7 @@ const AteFoodList = ({ handleSaveFood, selectedDate }) => {
             </p>
 
             <div className="mr-[220%] -mt-10">
-                <FoodChart ateFoodList={ateFoodList} />
+                <FoodChart ateFoodList={ateFoodList} width="200%" />
             </div>
 
             <ul className="-mt-[57%] space-y-2 max-h-[350px] overflow-auto w-[80%]">

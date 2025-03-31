@@ -69,7 +69,7 @@ const AteFoodList = ({ handleSaveFood, selectedDate }) => {
             </p>
 
             <div className="mr-[220%] -mt-10">
-                <FoodChart ateFoodList={ateFoodList} />
+                <FoodChart ateFoodList={ateFoodList} width="200%" />
             </div>
 
             <ul className="-mt-[57%] space-y-2 max-h-[350px] overflow-auto w-[80%]">
@@ -98,7 +98,7 @@ const AteFoodList = ({ handleSaveFood, selectedDate }) => {
 
             <div className="mt-auto mb-0">
                 <button
-                    className="bg-rookieRed text-white font-semibold py-3 px-5 rounded-lg"
+                    className="bg-rookieRed text-white font-semibold py-3 px-5 mt-5 rounded-lg"
                     onClick={() => setIsModalOpen(true)}
                 >
                     식단 검색 및 추가하기

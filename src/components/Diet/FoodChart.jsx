@@ -3,7 +3,7 @@ import Chart from "react-apexcharts";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
-const FoodChart = ({ ateFoodList }) => {
+const FoodChart = ({ ateFoodList, width = "100%" }) => {
     // 날짜 형식 변환
     const formatDate = (date) => {
         return format(date, "yyyy-MM-dd (EEE)", { locale: ko });
@@ -61,7 +61,7 @@ const FoodChart = ({ ateFoodList }) => {
     return (
         <div className="max-w-lg mx-auto bg-white rounded-lg">
             {nutritionData.length > 0 && (
-                <Chart options={data.options} series={data.series} type="donut" width="200%" />
+                <Chart options={data.options} series={data.series} type="donut" width={width} />
             )}
         </div>
     );

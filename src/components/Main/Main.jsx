@@ -97,7 +97,8 @@ const Main = () => {
 
     return (
         <main className="flex flex-col md:flex-row gap-5 p-4 flex-1 h-full">
-            <div className="flex flex-col gap-4 flex-1 h-full">
+            {/* 왼쪽 섹션 (65%) */}
+            <div className="flex flex-col gap-4 w-[65%] h-full">
                 {/* 상단 두 개 박스 */}
                 <div className="flex flex-col md:flex-row gap-4 flex-1">
                     <div className="flex-[3]">
@@ -124,8 +125,10 @@ const Main = () => {
                 </div>
             </div>
 
-            {/* 오른쪽 박스 */}
-            <WorkoutTrendSection />
+            {/* 오른쪽 박스 (35%) */}
+            <div className="w-[35%]">
+                <WorkoutTrendSection />
+            </div>
         </main>
     );
 };

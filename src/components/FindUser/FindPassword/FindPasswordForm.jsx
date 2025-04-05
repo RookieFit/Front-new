@@ -11,6 +11,11 @@ const FindPasswordForm = ({ onNext }) => {
             alert("아이디와 전화번호를 입력해주세요.");
             return;
         }
+        const phoneRegex = /^[0-9]{10,11}$/;
+        if (!phoneRegex.test(phoneNumber)) {
+            alert("유효한 전화번호를 입력해주세요.");
+            return;
+        }
         onNext(userId);
     };
 

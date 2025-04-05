@@ -22,7 +22,8 @@ const CalendarSection = ({ callyRef }) => {
                         minWidth: '300px',
                         maxWidth: '600px',
                         width: '100%',
-                        height: '320px' // 높이 고정
+                        height: '360px',
+                        boxShadow: 'none'
                     }}
                     value={today} // 오늘 날짜 설정
                     min="2025-01-01"
@@ -53,7 +54,8 @@ const CalendarSection = ({ callyRef }) => {
                             width: '100%',
                             height: '280px', // 내부 월 표시 영역 높이 고정
                             display: 'grid',
-                            gridTemplateRows: 'auto repeat(6, 1fr)' // 요일 헤더 + 최대 6주 표시 (고정 높이)
+                            gridTemplateRows: 'auto repeat(6, 1fr)', // 요일 헤더 + 최대 6주 표시 (고정 높이)
+                            boxShadow: 'none'
                         }}
                     >
                     </calendar-month>

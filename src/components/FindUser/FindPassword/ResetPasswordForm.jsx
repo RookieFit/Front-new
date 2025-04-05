@@ -20,7 +20,7 @@ const ResetPasswordForm = ({ userId, onReset }) => {
     return (
         <div className="w-full max-w-md p-4">
             <div className="mb-4">
-                <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="newPassword" className="block text-sm font-medium text-rookieRed">
                     New Password
                 </label>
                 <input
@@ -33,8 +33,8 @@ const ResetPasswordForm = ({ userId, onReset }) => {
                 />
             </div>
             <div className="mb-4">
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                    Confirm Password
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-rookieRed">
+                    Confirm New Password
                 </label>
                 <input
                     type="password"
@@ -48,10 +48,10 @@ const ResetPasswordForm = ({ userId, onReset }) => {
             <div className="flex justify-end">
                 <button
                     type="button"
-                    className="w-36 bg-rookieRed text-white py-2 rounded-lg font-semibold text-xl mt-4"
+                    className="w-full bg-rookieRed text-white py-2 rounded-lg font-semibold text-m mt-4"
                     onClick={handleReset}
                 >
-                    Reset
+                    새 비밀번호 설정 완료하기
                 </button>
             </div>
         </div>

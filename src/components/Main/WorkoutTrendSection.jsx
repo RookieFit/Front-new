@@ -182,7 +182,7 @@ const WorkoutTrendSection = () => {
                         {displayWorkouts.map((workout, index) => (
                             <div
                                 key={index}
-                                className="flex flex-col bg-white p-3 rounded shadow-sm text-black border-l-2 border-rookieRed border-[1px] border-gray-100"
+                                className="flex flex-col bg-white p-3 rounded shadow-sm text-black border-l-2 border-rookieRed border-[1px]"
                             >
                                 <div className="flex justify-between items-center">
                                     <span className="text-xs text-gray-500 font-medium">

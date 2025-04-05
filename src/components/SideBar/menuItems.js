@@ -12,7 +12,6 @@ export const menuItems = [
         path: "",
         subItems: [
             { name: "식단", path: "/diet" },
-            { name: "서브메뉴2", path: "" },
         ],
     },
     {

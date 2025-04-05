@@ -33,7 +33,7 @@ const ResetPasswordPage = () => {
                         New Password
                     </h1>
                     <p className="text-sm text-gray-500 text-center mb-8">
-                        영문, 숫자 포함 8자 이상 입력해주세요.
+                        영문, 숫자를  포함하여<br />8자 이상 20자 이내로 새 비밀번호를 설정해 주세요
                     </p>
                 </header>
                 <div className="w-full max-w-md p-6 rounded-lg border border-gray-500">

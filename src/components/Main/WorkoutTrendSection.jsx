@@ -96,7 +96,7 @@ const WorkoutTrendSection = () => {
         const fetchCalorieData = async () => {
             try {
                 const response = await ApiClient.get('/user/workout/getdailycalorie');
-                const data = response.data;
+                const {data} = response;
 
                 // 데이터 없는 경우 처리
                 if (!data || data.length === 0) {

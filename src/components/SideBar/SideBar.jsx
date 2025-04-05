@@ -16,10 +16,10 @@ const SideBar = ({ isCollapsed, toggleSidebar }) => {
         if (isAuthenticated) {
             // 로그아웃 처리
             await logout();
-            navigate('/login');
+            sessionStorage.removeItem("accessToken");
+            navigate("/login", { replace: true });
         } else {
-            // 로그인 페이지로 이동
-            navigate('/login');
+            navigate("/login");
         }
     };
 

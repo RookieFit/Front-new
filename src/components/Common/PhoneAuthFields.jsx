@@ -19,7 +19,7 @@ const PhoneAuthFields = ({ onSendAuthCode, onVerifyAuthCode, inputTextColor = "w
 
     return (
         <div className="border border-gray-300 rounded-lg p-5 py-7">
-            <p className="text-white text-2xl mb-5 -mt-5">
+            <p className="text-mainText text-2xl mb-5 -mt-5">
                 PhoneNumber
             </p>
 

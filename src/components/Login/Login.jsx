@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ApiClient from "../../services/ApiClient";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { setAccessToken } from "../../services/Store";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -31,10 +31,13 @@ const Login = () => {
             if (error.response) {
                 console.log("서버 응답 오류:", error.response.data);
                 console.error("응답 상태 코드:", error.response.status);
+                alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
             } else if (error.request) {
                 console.error("서버로부터 응답을 받지 못했습니다:", error.request);
+                alert("서버 연결에 문제가 있습니다. 잠시 후 다시 시도해주세요.");
             } else {
                 console.error("요청 설정 오류:", error.message);
+                alert("로그인 중 오류가 발생했습니다.");
             }
         };
     };
@@ -82,14 +85,20 @@ const Login = () => {
                     </button>
                 </form>
                 <footer className="text-right mt-4 text-sm font-light text-rookieRed">
-                    <a href="#" className="hover:underline">
+                    <Link to="/findid" className="hover:underline">
                         아이디찾기
-                    </a>
+                    </Link>
                     <span className="mx-2">|</span>
-                    <a href="#" className="hover:underline">
-                        비밀번호찾기
-                    </a>
+                    <Link to="/findpassword" className="hover:underline">
+                        비밀번호 찾기
+                    </Link>
                 </footer>
+                <div className="text-center mt-4">
+                    <p className="text-sm text-gray-500">아직 계정이 없으신가요?</p>
+                    <Link to="/signup" className="text-rookieRed font-medium hover:underline">
+                        회원가입하기
+                    </Link>
+                </div>
             </section>
         </div>
     );

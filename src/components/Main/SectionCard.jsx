@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const SectionCard = ({ title, children }) => {
     return (
-        <article className="flex-1 h-full bg-mainRed rounded-md p-4 opacity-60">
+        <article className="flex-1 h-full bg-mainRed rounded-md p-4 bg-opacity-40">
             <header>
                 <h2 className="text-lg text-mainText ml-2">{title}</h2>
             </header>

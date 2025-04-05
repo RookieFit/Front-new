@@ -18,7 +18,7 @@ const TodoSection = ({ selectedDate, todoList, checkedTodos, handleCheck }) => {
                 {selectedDate ? formattedDate : ""}
             </div>
             {/* 구분선 */}
-            <hr className="mb-2 border-gray-300" />
+            <hr className="mb-2 border-gray-500" />
 
             {/* 투두 목록 */}
             <div className="overflow-y-auto max-h-60 space-y-2 text-lg">

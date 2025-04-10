@@ -33,7 +33,7 @@ const ResetPasswordForm = ({ userId, onReset }) => {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rookieHover"
-                    placeholder="새 비밀번호를 입력하세요"
+                    placeholder="새 비밀번호를 입력해주세요"
                 />
             </div>
             <div className="mb-4">
@@ -46,7 +46,7 @@ const ResetPasswordForm = ({ userId, onReset }) => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rookieHover"
-                    placeholder="비밀번호를 다시 입력하세요"
+                    placeholder="비밀번호를 다시 입력해주세요"
                 />
             </div>
             <div className="flex justify-end">

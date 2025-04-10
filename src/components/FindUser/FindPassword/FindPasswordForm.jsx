@@ -31,7 +31,7 @@ const FindPasswordForm = ({ onNext }) => {
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rookieHover"
-                    placeholder="아이디를 입력하세요"
+                    placeholder="아이디를 입력해주세요"
                 />
             </div>
             <PhoneAuthFields

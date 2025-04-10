@@ -13,6 +13,8 @@ import TodoList from "../components/Todo/TodoList";
 import MyCommunityPage from "../pages/Community/MyCommunityPage";
 import UpdateCommunityEditor from "../components/Community/UpdateCommunityEditor";
 import DietPage from "../pages/Diet/DietPage";
+import ResetPasswordPage from "../pages/Find/ResetPasswordPage";
+import FindPasswordPage from "../pages/Find/FindPasswordPage";
 
 const router = createBrowserRouter([
     {
@@ -72,6 +74,14 @@ const router = createBrowserRouter([
     {
         path: "/findid",
         element: <FindPage />,
+    },
+    {
+        path: "/findpassword",
+        element: <FindPasswordPage />,
+    },
+    {
+        path: "/reset-password",
+        element: <ResetPasswordPage />,
     },
 ]);
 

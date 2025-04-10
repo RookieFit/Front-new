@@ -5,7 +5,8 @@ import ApiClient from '../../services/ApiClient';
 import { parseISO } from 'date-fns';
 
 const WorkoutTrendSection = () => {
-    const [workoutData, setWorkoutData] = useState([]);
+    const [workoutData, setWorkoutData] = useState([]); // 운동 기록 목록용 데이터
+    const [calorieData, setCalorieData] = useState([]); // 차트용 칼로리 데이터
     const [showAllRecords, setShowAllRecords] = useState(false);
     const [chartData, setChartData] = useState({
         series: [],
@@ -62,7 +63,7 @@ const WorkoutTrendSection = () => {
         }
     };
 
-    // 운동 데이터 가져오기
+    // 운동 기록 목록 데이터 가져오기
     useEffect(() => {
         const fetchWorkoutData = async () => {
             try {
@@ -80,10 +81,35 @@ const WorkoutTrendSection = () => {
                     new Date(b.workoutCreatedDate) - new Date(a.workoutCreatedDate)
                 );
 
+                setWorkoutData(sortedData);
+            } catch (error) {
+                console.error('운동 기록을 불러오는데 실패했습니다:', error);
+                setWorkoutData([]);
+            }
+        };
+
+        fetchWorkoutData();
+    }, []);
+
+    // 차트용 칼로리 데이터 가져오기
+    useEffect(() => {
+        const fetchCalorieData = async () => {
+            try {
+                const response = await ApiClient.get('/user/workout/getdailycalorie');
+                const {data} = response;
+
+                // 데이터 없는 경우 처리
+                if (!data || data.length === 0) {
+                    setCalorieData([]);
+                    return;
+                }
+
                 // 차트 데이터 구성 (날짜순 정렬)
                 const chartSortedData = [...data].sort((a, b) =>
                     new Date(a.workoutCreatedDate) - new Date(b.workoutCreatedDate)
                 );
+
+                setCalorieData(chartSortedData);
 
                 const categories = chartSortedData.map(item =>
                     `${formatDateShort(item.workoutCreatedDate)}(${getDayOfWeek(item.workoutCreatedDate)})`
@@ -93,7 +119,6 @@ const WorkoutTrendSection = () => {
                     item.dailyCaloriesBurned ? Number(item.dailyCaloriesBurned) : 0
                 );
 
-                setWorkoutData(sortedData); // 최신순 정렬
                 setChartData(prev => ({
                     ...prev,
                     series: [{ name: '소모 칼로리', data: seriesData }],
@@ -103,12 +128,12 @@ const WorkoutTrendSection = () => {
                     },
                 }));
             } catch (error) {
-                console.error('운동 데이터를 불러오는데 실패했습니다:', error);
-                setWorkoutData([]);
+                console.error('칼로리 데이터를 불러오는데 실패했습니다:', error);
+                setCalorieData([]);
             }
         };
 
-        fetchWorkoutData();
+        fetchCalorieData();
     }, []);
 
     // 차트에 표시할 데이터가 있는지 확인
@@ -130,7 +155,6 @@ const WorkoutTrendSection = () => {
 
     return (
         <SectionCard title="이번주 운동량 추세">
-            {/* 차트 */}
             <div className="mb-6 bg-white p-4 rounded-lg shadow-sm">
                 {hasChartData ? (
                     <Chart
@@ -152,14 +176,13 @@ const WorkoutTrendSection = () => {
                 <div className="h-0.5 flex-1 bg-gray-500 bg-opacity-30"></div>
             </div>
 
-            {/* 운동 기록 */}
             <div className="space-y-2 bg-white bg-opacity-10 p-3 rounded-lg max-h-[400px] overflow-y-auto">
                 {displayWorkouts.length > 0 ? (
                     <>
                         {displayWorkouts.map((workout, index) => (
                             <div
                                 key={index}
-                                className="flex flex-col bg-white p-3 rounded shadow-sm text-black border-l-2 border-rookieRed border-[1px] border-gray-100"
+                                className="flex flex-col bg-white p-3 rounded shadow-sm text-black border-l-2 border-rookieRed border-[1px]"
                             >
                                 <div className="flex justify-between items-center">
                                     <span className="text-xs text-gray-500 font-medium">

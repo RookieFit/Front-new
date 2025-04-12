@@ -11,8 +11,11 @@ const ResetPasswordPage = () => {
     const handleResetPassword = async (newPassword) => {
         console.log("ResetPasswordPage - Received userId:", userId);
         try {
-            // URL에 쿼리 파라미터로 데이터 전송
-            const response = await ApiClient.post(`/auth/reset-password?userId=${userId}&newPassword=${newPassword}`);
+            // 데이터는 요청 본문으로 전송
+            const response = await ApiClient.post(`/auth/reset-password`, {
+                userId: userId,
+                newPassword: newPassword,
+            });
 
             if (response.status === 200) {
                 alert("비밀번호가 성공적으로 변경되었습니다.");

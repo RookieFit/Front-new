@@ -9,25 +9,19 @@ const FindIdForm = ({ onNext }) => {
     const [error, setError] = useState("");
 
     const handleFindId = async () => {
-        if (!phoneNumber.trim() || !verificationCode.trim()) {
-            setError("전화번호와 인증번호를 입력해주세요.");
-            return;
-        }
-
         try {
-            // 인증번호 검증 없이 API 요청
             const response = await ApiClient.post(
-                `/api/auth/find-id?userPhoneNumber=${phoneNumber}&verificationCode=${verificationCode}`
+                `/auth/find-id?userPhoneNumber=${phoneNumber}&verificationCode=${verificationCode}`
             );
 
             if (response.data && response.data.userId) {
-                onNext(response.data.userId); // 성공 시 userId를 전달
+                onNext(response.data.userId);
             } else {
-                setError("아이디를 찾을 수 없습니다.");
+                onNext(null);
             }
         } catch (err) {
-            console.error("아이디 찾기 실패:", err);
-            setError("아이디 찾기에 실패했습니다. 다시 시도해주세요.");
+            console.error(err);
+            onNext(null);
         }
     };
 

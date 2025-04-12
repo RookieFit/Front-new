@@ -9,8 +9,11 @@ const FindIdSuccess = ({ userId }) => {
         navigate("/login");
     };
 
-    // 아이디의 마지막 세 글자를 별표로 대체
-    const maskedUserId = userId.slice(0, -3) + '***';
+    const handleResetPassword = () => {
+        navigate("/reset-password", { state: { userId } });
+    };
+
+    const maskedUserId = userId.slice(0, -4) + '***';
 
     return (
         <div className="w-full max-w-md p-4">
@@ -28,7 +31,9 @@ const FindIdSuccess = ({ userId }) => {
                     >
                         로그인
                     </button>
-                    <button className="bg-white border border-rookieRed text-rookieRed px-4 py-2 rounded-md w-1/2">
+                    <button
+                        className="bg-white border border-rookieRed text-rookieRed px-4 py-2 rounded-md w-1/2"
+                        onClick={handleResetPassword}>
                         비밀번호 찾기
                     </button>
                 </div>

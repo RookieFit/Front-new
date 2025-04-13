@@ -9,11 +9,14 @@ const ResetPasswordPage = () => {
     const userId = location.state?.userId;
 
     const handleResetPassword = async (newPassword) => {
+        console.log("ResetPasswordPage - Received userId:", userId);
         try {
-            const response = await ApiClient.post("/auth/reset-password", {
-                userId,
-                newPassword,
+            // 데이터는 요청 본문으로 전송
+            const response = await ApiClient.post(`/auth/reset-password`, {
+                userId: userId,
+                newPassword: newPassword,
             });
+
             if (response.status === 200) {
                 alert("비밀번호가 성공적으로 변경되었습니다.");
                 navigate("/login");
@@ -33,7 +36,7 @@ const ResetPasswordPage = () => {
                         New Password
                     </h1>
                     <p className="text-sm text-gray-500 text-center mb-8">
-                        영문, 숫자를  포함하여<br />8자 이상 20자 이내로 새 비밀번호를 설정해 주세요
+                        영문, 숫자를 포함하여<br />8자 이상 20자 이내로 새 비밀번호를 설정해 주세요
                     </p>
                 </header>
                 <div className="w-full max-w-md p-6 rounded-lg border border-gray-500">

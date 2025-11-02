@@ -3,23 +3,27 @@ import SignUp from "../../components/SignUp/SignUp";
 import PhoneAuth from "../../components/SignUp/PhoneAuth";
 
 const SignUpPage = () => {
-    const [view, setView] = useState("signup"); // "signup" 또는 "phoneAuth"
+    const [view, setView] = useState("signup");
+    const [userId, setUserId] = useState("");
+    const [userPassword, setUserPassword] = useState("");
 
     return (
         <main className="flex h-screen">
-            {/* 왼쪽: 로그인 폼 */}
             <div className="flex items-center justify-center w-3/5 bg-white">
-                {/* 로그인 폼 내용 */}
             </div>
 
-            {/* 오른쪽: 배경 */}
             <div className="w-2/5 bg-rookieRed">
                 {view === "signup" ? (
-                    <SignUp onPhoneAuth={() => setView("phoneAuth")} />
-                ) : (
-                    <PhoneAuth onComplete={() => {
-                        // 회원가입 완료 후 처리
+                    <SignUp onPhoneAuth={(id, password) => {
+                        setUserId(id);
+                        setUserPassword(password);
+                        setView("phoneAuth");
                     }} />
+                ) : (
+                    <PhoneAuth 
+                        userId={userId}
+                        userPassword={userPassword}
+                    />
                 )}
             </div>
         </main>

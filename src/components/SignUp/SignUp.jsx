@@ -94,15 +94,14 @@ const SignUp = ({ onPhoneAuth }) => {
                             onFocus={() => setActiveField("confirmPassword")}
                             className={`w-full px-4 transition-all duration-200 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rookieHover ${activeField === "confirmPassword" ? "py-4 opacity-100" : "py-2 opacity-50"
                                 }`}
-                        />
-                        {activeField === "confirmPassword" &&
+                        />                        {activeField === "confirmPassword" &&
                             confirmPassword === password &&
                             password !== "" && (
                                 <button
                                     type="button"
                                     onClick={() => {
                                         if (onPhoneAuth) {
-                                            onPhoneAuth();
+                                            onPhoneAuth(id, password);
                                         } else {
                                             setActiveField("phoneAuth");
                                         }

@@ -4,7 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { menuItems } from './menuItems';
 import { useAuth } from '../../contexts/AuthContext';
 
-const SideBar = ({ isCollapsed, toggleSidebar }) => {
+const SideBar = () => {
+    const [isCollapsed, setIsCollapsed] = useState(true);
     const [openMenu, setOpenMenu] = useState(null);
     const { isAuthenticated, logout } = useAuth();
     const navigate = useNavigate();
@@ -31,69 +32,92 @@ const SideBar = ({ isCollapsed, toggleSidebar }) => {
         }
     };
 
-    return (
-        <aside className={`bg-rookieRed h-full flex flex-col justify-between transition-[width] duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}>
-            <nav>
+    // 마우스 오버 시 사이드바 펼치기
+    const handleMouseEnter = () => {
+        setIsCollapsed(false);
+    };
+
+    // 마우스 떠날 시 사이드바 접기
+    const handleMouseLeave = () => {
+        setIsCollapsed(true);
+        setOpenMenu(null); // 메뉴도 닫기
+    };
+
+    // 현재 인증 상태에 따른 아이콘 가져오기
+    const authMenuItem = menuItems.find(item =>
+        item.name === (isAuthenticated ? "로그아웃" : "로그인")
+    );
+    const AuthIcon = authMenuItem?.icon; return (
+        <aside
+            className={`bg-rookieRed h-full flex flex-col justify-between transition-[width] duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        ><nav>
                 <ul className="space-y-2">
-                    {normalMenuItems.map((item, index) => (
-                        <li key={index}>
-                            <button
-                                onClick={() => toggleMenu(index)}
-                                className="block w-full text-left text-white p-4 hover:bg-rookieHover rounded"
-                                aria-expanded={openMenu === index}
-                                aria-controls={`menu-${index}`}
-                            >
-                                <div className="flex items-center">
-                                    <span className={`ml-4 transition-opacity ${isCollapsed ? 'opacity-0' : 'opacity-100 delay-100'}`}>
+                    {normalMenuItems.map((item, index) => {
+                        const Icon = item.icon;
+                        return (
+                            <li key={index}>
+                                <button
+                                    onClick={() => toggleMenu(index)}
+                                    className="w-full text-left text-white p-4 hover:bg-rookieHover rounded flex items-center justify-start"
+                                    aria-expanded={openMenu === index}
+                                    aria-controls={`menu-${index}`}
+                                >
+                                    {Icon && <Icon className="text-2xl flex-shrink-0" />}
+                                    <span
+                                        className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed
+                                            ? 'max-w-0 opacity-0 ml-0'
+                                            : 'max-w-xs opacity-100 ml-4'
+                                            }`}
+                                    >
                                         {item.name}
                                     </span>
-                                </div>
-                            </button>
-                            {/* 하위 메뉴 */}
-                            {item.subItems && item.subItems.length > 0 && (
-                                <ul
-                                    id={`menu-${index}`}
-                                    className={`pl-4 mt-2 ml-4 space-y-1 overflow-hidden 
-                    ${openMenu === index && !isCollapsed
-                                            ? 'max-h-[500px] opacity-100 transition-[max-height, opacity] duration-200 ease-in-out'
-                                            : 'max-h-0 opacity-0 transition-[max-height, opacity] duration-200 ease-in-out'
-                                        }`}
-                                >
-                                    {item.subItems.map((subItem, subIndex) => (
-                                        <li key={subIndex}>
-                                            <Link
-                                                to={subItem.path}
-                                                className="block text-white p-2 hover:bg-rookieHover rounded"
-                                            >
-                                                {subItem.name}
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </li>
-                    ))}
+                                </button>
+                                {/* 하위 메뉴 */}
+                                {item.subItems && item.subItems.length > 0 && (
+                                    <ul
+                                        id={`menu-${index}`}
+                                        className={`pl-4 mt-2 ml-4 space-y-1 overflow-hidden 
+                        ${openMenu === index && !isCollapsed
+                                                ? 'max-h-[500px] opacity-100 transition-[max-height, opacity] duration-200 ease-in-out'
+                                                : 'max-h-0 opacity-0 transition-[max-height, opacity] duration-200 ease-in-out'
+                                            }`}
+                                    >
+                                        {item.subItems.map((subItem, subIndex) => (
+                                            <li key={subIndex}>
+                                                <Link
+                                                    to={subItem.path}
+                                                    className="block text-white p-2 hover:bg-rookieHover rounded"
+                                                >
+                                                    {subItem.name}
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </li>
+                        );
+                    })}
                 </ul>
-            </nav>
-
-            {/* 로그인/로그아웃 버튼 */}
+            </nav>            {/* 로그인/로그아웃 버튼 */}
             <div className="mb-4">
                 <button
                     onClick={handleAuthAction}
-                    className="block w-full text-left text-white p-4 hover:bg-rookieHover rounded mx-4"
+                    className="w-full text-left text-white p-4 hover:bg-rookieHover rounded flex items-center justify-start"
                 >
-                    <span className={`transition-opacity ${isCollapsed ? 'opacity-0' : 'opacity-100 delay-100'}`}>
+                    {AuthIcon && <AuthIcon className="text-2xl flex-shrink-0" />}
+                    <span
+                        className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed
+                            ? 'max-w-0 opacity-0 ml-0'
+                            : 'max-w-xs opacity-100 ml-4'
+                            }`}
+                    >
                         {isAuthenticated ? "로그아웃" : "로그인"}
                     </span>
                 </button>
-            </div>
-        </aside>
+            </div>        </aside>
     );
-};
-
-SideBar.propTypes = {
-    isCollapsed: PropTypes.bool.isRequired,
-    toggleSidebar: PropTypes.func.isRequired,
 };
 
 export default SideBar;

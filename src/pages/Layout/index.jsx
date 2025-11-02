@@ -1,14 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import SideBar from "../../components/SideBar/SideBar";
 
 const Layout = () => {
-    const [isCollapsed, setIsCollapsed] = useState(false);
     const navigate = useNavigate();
-
-    const toggleSidebar = () => {
-        setIsCollapsed(!isCollapsed);
-    };
 
     const onClick = () => {
         navigate("/");
@@ -21,19 +16,11 @@ const Layout = () => {
                 <h2 className="text-3xl font-semibold cursor-pointer" onClick={onClick}>
                     Rookie Fit
                 </h2>
-                <button
-                    onClick={toggleSidebar}
-                    className="text-white hover:text-gray-300 mr-4"
-                >
-                    <span className="material-icons ml-12 text-2xl font-bold">
-                        {isCollapsed ? ">>" : "<<"}
-                    </span>
-                </button>
             </header>
 
             {/* 메인 컨텐츠 영역 */}
             <div className="flex flex-grow">
-                <SideBar isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} />
+                <SideBar />
                 <main className="flex-1 p-2 bg-gray-100 ">
                     <Outlet />
                 </main>

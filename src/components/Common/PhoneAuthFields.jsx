@@ -5,7 +5,7 @@ const PhoneAuthFields = ({ phoneNumber, setPhoneNumber, verificationCode, setVer
     return (
         <div>
             <div className="mb-4">
-                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-300">
                     Phone Number
                 </label>
                 <input
@@ -18,7 +18,7 @@ const PhoneAuthFields = ({ phoneNumber, setPhoneNumber, verificationCode, setVer
                 />
             </div>
             <div className="mb-4">
-                <label htmlFor="verificationCode" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="verificationCode" className="block text-sm font-medium text-gray-300">
                     Verification Code
                 </label>
                 <input
